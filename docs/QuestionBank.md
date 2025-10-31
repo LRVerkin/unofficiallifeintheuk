@@ -14,7 +14,7 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
 - correct: [1, 2, 3, 4, 5]
 - feedback:
     correct: Correct.
-    incorrect: Incorrect. The correct order is: Waitrose, M&S, Sainsbury’s, Tesco, Aldi.
+    incorrect: Incorrect. Do you even live here? The correct order is: Waitrose, M&S, Sainsbury’s, Tesco, Aldi.
 - required: true
 - tags: [shopping, culture]
 - special_rules: Full marks only for exact order; no partial scoring.
@@ -41,10 +41,10 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
 - type: single
 - prompt: Your British colleague says your idea is “fascinating.” Do they mean:
 - options:
-  1. a) Genuinely intrigued
-  2. b) It’s the stupidest thing they’ve ever heard
-  3. c) They weren’t listening
-  4. d) They hate you personally
+  1. Genuinely intrigued
+  2. It’s the stupidest thing they’ve ever heard
+  3. They weren’t listening
+  4. They hate you personally
 - correct: [2]
 - feedback:
     1: Incorrect. You may need to brush up on your British passive-aggressiveness translations.
@@ -79,10 +79,10 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
   4. Ballsdeep
 - correct: [4]
 - feedback:
-    1: Incorrect. Beattock (Dumfries and Galloway) has a population of ~1,000.
-    2: Incorrect. Twatt very much exists: ask your father. It’s a settlement in Orkney.
-    3: Incorrect. Dull, in Perth and Kinross, is part of the *League of Extraordinary Communities* (with Bland, Australia, and Boring, USA).
-    4: Correct. Ballsdeep is far too rude a name for a town, unlike Bitchfield, Wetwang, and Shitterton.
+    1: Incorrect. Beattock located in the council of [Dumfries and Galloway](https://en.wikipedia.org/wiki/Dumfries_and_Galloway), boasts a population of 1,000.
+    2: Incorrect. Twatt very much exists: ask your father. Lovely Twatt is a settlement in the parish of Birsay, on the island of Orkney.
+    3: Incorrect. Dull, located in Perth and Kinross, is a very real town, making one third of the League of Extraordinary Communities (along with Bland, Australia, and Boring, USA).
+    4: Correct. Ballsdeep is far too rude a name for a town, unlike [Bitchfield](https://en.wikipedia.org/wiki/Bitchfield), [Wetwang](https://en.wikipedia.org/wiki/Wetwang) and [Shitterton](https://en.wikipedia.org/wiki/Shitterton).
 - required: true
 - tags: [geography, humour]
 - special_rules: none
@@ -91,7 +91,7 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
 - type: text
 - prompt: Complete this sentence: “See it, say it…”
 - options: []
-- correct: ["sorted"]
+- correct: ["sorted"] //should accept whenever the word is contained in answer
 - required: true
 - tags: [transport, language]
 - special_rules: none
@@ -129,7 +129,9 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
   2. b) Say “good thanks, you?”
   3. c) Nod slightly
   4. d) Say “alright” back
-- correct: [4]
+- correct: [2,4]
+- feedback:
+  1. God, you're embarrassing.
 - required: true
 - tags: [language, etiquette]
 - special_rules: none
@@ -138,22 +140,28 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
 - type: single
 - prompt: When the Queen died, the appropriate mourning period lasted:
 - options:
-  1. a) 2 days
-  2. b) 70 years
-  3. c) Depends if you got the day off work
-- correct: [3]
+  1. 2 days
+  2. 70 years
+  3. Depends if you got the day off work
+- correct: [1,3]
 - required: true
 - tags: [culture, humour]
 - special_rules: none
 
 ## Q011
-- type: text
+- type: single
 - prompt: Harry’s train leaves London Paddington at 10:30 am. It takes 2 h 30. When will Harry arrive in Manchester?
-- options: []
-- correct: ["anything < 1:30 pm"]
+- options:
+  1. 1.30pm
+  2. 1pm
+  3. 1.15pm
+  4. Lord only knows
+- correct: [1,4]
 - feedback:
-    correct: “Optimistic!” (anything < 1:30 pm)
-    incorrect: “Incorrect, as you assume the train will arrive on time.” (1 pm)
+    1: “Optimistic!”
+    2: “Incorrect, as you assume the train will arrive on time.”
+    3: "Only 15 minutes late? Come on."
+    4: "Correct!"
 - required: true
 - tags: [transport, humour]
 - special_rules: none
@@ -168,8 +176,7 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
   4. Window shut
 - correct: [1, 2, 4]
 - feedback:
-    option_notes:
-      3: Incorrect. Your landlord will…
+    3: Incorrect, but if that's your experience of landlords, I envy you.
 - required: true
 - tags: [housing, humour]
 - special_rules: (contributed by Jess & Simona)
@@ -183,15 +190,22 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
   3. Top Gear
   4. the royal family
 - correct: [4]
+- feedback:
+  1. Well-liked, but no.
+  2. Well-liked, but no.
+  3. Well-liked, but no.
+  4. Correct! Who said the Truman show was fiction?
 - required: true
 - tags: [television, humour]
 - special_rules: none
 
 ## Q014
-- type: text
+- type: single
 - prompt: How many syllables are in “Leicester”?
-- options: []
-- correct: ["2"]
+- options:
+  1. 2
+  2. 3
+- correct: [1]
 - feedback:
     incorrect: Incorrect. You pronounce the sauce Wor-ces-ter-shy-re, don’t you?
 - required: true
@@ -227,7 +241,7 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
   1. Grand Parade for the sovereign
   2. Belfast slang for the English
   3. Your doctor
-  4. A clothing brand
+  4. A well-known weight-loss drug
 - correct: [3]
 - required: true
 - tags: [language, health]
@@ -241,8 +255,8 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
   2. No
 - correct: [1]
 - feedback:
-    1: Correct! All British residents will have been threatened by the BBC TV license mafia.
-    2: Incorrect. You’re either lying, new, or haven’t checked your postbox recently.
+    1: Correct! All British residents will have been threatened by the BBC TV License mafia.
+    2: Incorrect. You’re either lying, new, or haven’t checked your postbox recently. But don't worry: BBC TV License enforcers will find you eventually.
 - required: true
 - tags: [bureaucracy, humour]
 - special_rules: none
@@ -251,13 +265,14 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
 - type: multiple
 - prompt: You open the curtains to bright blue skies. What must you bring?
 - options:
-  1. ☑ Sunglasses
-  2. ☑ Sunscreen
-  3. ☑ Light jacket
-  4. ☑ Umbrella
+  1. Sunglasses
+  2. Sunscreen
+  3. Light jacket
+  4. Umbrella
 - correct: [1, 2, 3, 4]
 - feedback:
     overall_correct: There are 4 seasons in the UK, and you’ll commonly experience all 4 in a single day.
+    incorrect: There are 4 seasons in the UK, and you’ll commonly experience all 4 in a single day. Plan accordingly.
 - required: true
 - tags: [weather, preparedness]
 - special_rules: (if not checked, fail)
@@ -272,7 +287,9 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
   4. None of the above
 - correct: [4]
 - feedback:
-    correct: “Love” is punctuation in customer service. You’re not special.
+    correct: Correct. "Love" is pretty much punctuation for anyone working in customer service and should not be understood to mean anything else.
+    1: Incorrect. "Love" is pretty much punctuation for anyone working in customer service. You're not special.
+    2 or 3: Incorrect. "Love" is pretty much punctuation for anyone working in customer service.
 - required: true
 - tags: [etiquette, culture]
 - special_rules: none
@@ -286,9 +303,9 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
   3. Check how your friend does it first
 - correct: [3]
 - feedback:
-    1: The Devon way! Objectively correct but culturally insensitive.
-    2: Incorrect. The Cornish way? Objectively wrong.
-    3: Correct. A sensitive cultural matter.
+    1: The Devon way! Objectively correct but culturally insensitive not to check how your friend does it.
+    2: Incorrect. Not only are you being culturally insensitive by not checking what your friend does, but also, the Cornish way? Objectively wrong.
+    3: Correct. The order in which to cream your scone is a highly sensitive cultural matter that must be treated with due caution.
 - required: true
 - tags: [food, etiquette]
 - special_rules: none
@@ -315,7 +332,9 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
   3. Never put milk in tea
 - correct: [2]
 - feedback:
-    3: The Home Office is on their way to expel you.
+    1. Incorrect. Any British citizen must know that you steep the tea in hot water first, then you add the milk. Do you actually live here?
+    2. Correct. British teabags steep best in hot water.
+    3: Pardon? The Home Office is on their way to expel you.
 - required: true
 - tags: [tea, etiquette]
 - special_rules: none
