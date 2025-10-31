@@ -213,10 +213,17 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
 - special_rules: none
 
 ## Q015
-- type: text
-- prompt: Parliament’s Central Lobby has 4 corridors, one per patron saint. Complete the Scottish corridor entry: English corridor → House of Lords; Welsh → House of Commons; Northern Irish → Exit; Scottish → ?
-- options: []
-- correct: ["The bar"]
+- type: single
+- prompt: You are in your bathroom after a shower. You need to dry your hair quickly. What do you do?
+- options:
+  1. Use a hairdryer in your bathroom.
+  2. Go to your bedroom to use your hairdryer.
+  3. Go to your kitchen to use your hairdryer.
+  4. Go to any other room to use your hairdryer.
+- correct: [2,3,4]
+- feedback:
+  1: A normal power outlet? In a bathroom? You don't live in the UK.
+  correct: Correct! There are no regular power outlets in bathrooms.
 - required: true
 - tags: [politics, humour]
 - special_rules: none
