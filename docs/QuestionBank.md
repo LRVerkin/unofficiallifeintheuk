@@ -57,7 +57,7 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
 - type: single
 - prompt: You are a British middle-aged man and it’s 25°C today. What is the appropriate outfit to wear to a public park?
 - options:
-  1. Shorts and tee-shirt
+  1. Shorts and t-shirt
   2. Full business suit
   3. Tracksuit
   4. The tiniest bathing shorts you can find before lying belly-first on the grass until you’re cooked medium-rare
@@ -79,9 +79,9 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
   4. Ballsdeep
 - correct: [4]
 - feedback:
-    1: Incorrect. Beattock located in the council of [Dumfries and Galloway](https://en.wikipedia.org/wiki/Dumfries_and_Galloway), boasts a population of 1,000.
+    1: Incorrect. Beattock, located in the council area of [Dumfries and Galloway](https://en.wikipedia.org/wiki/Dumfries_and_Galloway), boasts a population of 1,000.
     2: Incorrect. Twatt very much exists: ask your father. Lovely Twatt is a settlement in the parish of Birsay, on the island of Orkney.
-    3: Incorrect. Dull, located in Perth and Kinross, is a very real town, making one third of the League of Extraordinary Communities (along with Bland, Australia, and Boring, USA).
+    3: Incorrect. Dull, located in Perth and Kinross, is a very real town, making up one third of the League of Extraordinary Communities (along with Bland, Australia, and Boring, USA).
     4: Correct. Ballsdeep is far too rude a name for a town, unlike [Bitchfield](https://en.wikipedia.org/wiki/Bitchfield), [Wetwang](https://en.wikipedia.org/wiki/Wetwang) and [Shitterton](https://en.wikipedia.org/wiki/Shitterton).
 - required: true
 - tags: [geography, humour]
@@ -113,9 +113,9 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
 - prompt: What is *not* a fundamental principle of British life?
 - options:
   1. Stiff upper lip
-  2. queueing
-  3. a pint with your mates
-  4. building housing
+  2. Queueing
+  3. A pint with your mates
+  4. Building housing
 - correct: [4]
 - required: true
 - tags: [culture, humour]
@@ -125,10 +125,10 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
 - type: single
 - prompt: If someone says “alright?”, they expect you to:
 - options:
-  1. a) Tell them how you are
-  2. b) Say “good thanks, you?”
-  3. c) Nod slightly
-  4. d) Say “alright” back
+  1. Tell them how you are
+  2. Say “good thanks, you?”
+  3. Nod slightly
+  4. Say “alright” back
 - correct: [2,4]
 - feedback:
   1. God, you're embarrassing.
@@ -150,7 +150,7 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
 
 ## Q011
 - type: single
-- prompt: Harry’s train leaves London Paddington at 10:30 am. It takes 2 h 30. When will Harry arrive in Manchester?
+- prompt: Harry’s train leaves London Euston at 10:30 am. It takes 2h 30 minutes. When will Harry arrive in Manchester?
 - options:
   1. 1.30pm
   2. 1pm
@@ -207,7 +207,7 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
   2. 3
 - correct: [1]
 - feedback:
-    incorrect: Incorrect. You pronounce the sauce Wor-ces-ter-shy-re, don’t you?
+    incorrect: Incorrect. You pronounce the sauce Wor-ces-ter-shire, don’t you?
 - required: true
 - tags: [language, pronunciation]
 - special_rules: none
@@ -256,14 +256,14 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
 
 ## Q018
 - type: single
-- prompt: Have you ever received threatening letters? (BBC TV License)
+- prompt: Have you ever received threatening letters? (BBC TV Licence)
 - options:
   1. Yes
   2. No
 - correct: [1]
 - feedback:
-    1: Correct! All British residents will have been threatened by the BBC TV License mafia.
-    2: Incorrect. You’re either lying, new, or haven’t checked your postbox recently. But don't worry: BBC TV License enforcers will find you eventually.
+    1: Correct! All British residents will have been threatened by the BBC TV Licence mafia.
+    2: Incorrect. You’re either lying, new, or haven’t checked your postbox recently. But don't worry: BBC TV Licence enforcers will find you eventually.
 - required: true
 - tags: [bureaucracy, humour]
 - special_rules: none
@@ -278,7 +278,7 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
   4. Umbrella
 - correct: [1, 2, 3, 4]
 - feedback:
-    overall_correct: There are 4 seasons in the UK, and you’ll commonly experience all 4 in a single day.
+    overall_correct: There are 4 seasons in the UK, and you’ll often experience all 4 in a single day.
     incorrect: There are 4 seasons in the UK, and you’ll commonly experience all 4 in a single day. Plan accordingly.
 - required: true
 - tags: [weather, preparedness]
