@@ -33,20 +33,29 @@ A fast, tongue-in-cheek Life in the UK quiz built with Next.js 16, TypeScript, T
 
 ## Scripts
 
-| Script                  | Description                                                     |
-| ----------------------- | --------------------------------------------------------------- |
-| `pnpm dev`              | Start Next.js in development mode.                              |
-| `pnpm build`            | Create a production build.                                      |
-| `pnpm start`            | Serve the production build locally.                             |
-| `pnpm lint`             | Run ESLint with the shared config.                              |
-| `pnpm lint:styles`      | Lint CSS with Stylelint.                                        |
-| `pnpm typecheck`        | Run TypeScript in no-emit mode.                                 |
-| `pnpm test:unit`        | Execute Vitest (jsdom environment) with coverage configuration. |
-| `pnpm test:integration` | Reserved for future Vitest integration suites.                  |
-| `pnpm test:e2e`         | Placeholder until Playwright lands (Step 9).                    |
-| `pnpm format`           | Format files with Prettier.                                     |
+| Script                    | Description                                                                                                      |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `pnpm dev`                | Start Next.js in development mode.                                                                               |
+| `pnpm build`              | Create a production build.                                                                                       |
+| `pnpm start`              | Serve the production build locally.                                                                              |
+| `pnpm lint`               | Run ESLint with the shared config.                                                                               |
+| `pnpm lint:styles`        | Lint CSS with Stylelint.                                                                                         |
+| `pnpm typecheck`          | Run TypeScript in no-emit mode.                                                                                  |
+| `pnpm test:unit`          | Execute Vitest (jsdom environment) with coverage configuration.                                                  |
+| `pnpm test:integration`   | Reserved for future Vitest integration suites.                                                                   |
+| `pnpm test:e2e`           | Placeholder until Playwright lands (Step 9).                                                                     |
+| `pnpm format`             | Format files with Prettier.                                                                                      |
+| `pnpm generate:questions` | Parse `docs/QuestionBank.md` and regenerate `data/questions.ts` (also runs before `build` and during `prepare`). |
 
 Husky + lint-staged run ESLint, Stylelint, and Prettier on staged files before commits once hooks are enabled.
+
+## Content Workflow
+
+1. Edit questions in `docs/QuestionBank.md` or persona metadata in `data/personas.ts`.
+2. Run `pnpm generate:questions` to sync the strongly typed module.
+3. Execute `pnpm test:unit` to ensure the parser + persona coverage tests stay green.
+
+The generator fails fast if required fields are missing or IDs collide, keeping the Markdown source honest.
 
 ## Project Structure
 
@@ -72,6 +81,5 @@ docs/             # PRD, architecture, workplans
 
 ## Next Steps
 
-- Step 2 will introduce the Markdown-driven question generator under `scripts/`.
 - Step 3 builds the quiz engine modules in `lib/quiz` using the new testing stack.
 - Step 4 layers on the shared design system and production-ready UI primitives.

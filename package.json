@@ -9,6 +9,7 @@
   },
   "scripts": {
     "dev": "next dev",
+    "prebuild": "pnpm generate:questions",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
@@ -18,7 +19,8 @@
     "test:integration": "vitest run --dir tests/integration",
     "test:e2e": "echo \"Playwright suite will land in Step 9\" && exit 0",
     "format": "prettier --write .",
-    "prepare": "husky"
+    "generate:questions": "ts-node --project tsconfig.scripts.json scripts/generate-question-bank.ts",
+    "prepare": "husky && pnpm generate:questions"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
@@ -35,12 +37,14 @@
   "dependencies": {
     "next": "16.0.1",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/mdast": "^4.0.4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -51,13 +55,17 @@
     "husky": "^9.1.7",
     "jsdom": "^27.1.0",
     "lint-staged": "^16.2.6",
+    "mdast-util-to-string": "^4.0.0",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
+    "remark-parse": "^11.0.0",
     "stylelint": "^16.25.0",
     "stylelint-config-standard": "^39.0.1",
     "stylelint-order": "^7.0.0",
     "tailwindcss": "3.4.15",
+    "ts-node": "^10.9.2",
     "typescript": "^5",
+    "unified": "^11.0.5",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^4.0.8"
   }
