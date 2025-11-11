@@ -24,6 +24,7 @@ Comprehensive blueprint for implementing the MVP web experience described in the
 ---
 
 ## 3. Technology Stack Decisions
+- All primary tooling/services must be free/open-source or operate on a free tier for the MVP (e.g., pnpm, Next.js, Tailwind, Plausible’s free analytics plan); any future paid upgrade requires explicit approval.
 - **Language**: TypeScript everywhere for type safety and clear domain contracts.
 - **Framework**: Next.js 15 App Router for hybrid SSG/SSR, route conventions, React 18+ features, and incremental adoption of the latest stable APIs.
 - **Styling**: Tailwind CSS with `@tailwindcss/typography` + CSS custom properties for theme; use Radix UI primitives for accessibility where helpful (e.g., dialogs, tooltips).
@@ -35,6 +36,7 @@ Comprehensive blueprint for implementing the MVP web experience described in the
   - Integration: Component tests with Playwright Component Testing (optional) or RTL.
   - E2E: Playwright (runs against Next dev server / preview build).
 - **Tooling**: pnpm as package manager; ESLint (Next config + custom rules), Prettier, Commitlint (optional).
+- **Component Workbench**: Storybook is deferred until Step 4 when the shared UI system lands; evaluate then (it remains optional and fits within the all-free-tooling constraint).
 - **CI/CD**: GitHub Actions (lint, typecheck, unit, component, e2e on preview build) + Vercel preview deployments.
 
 ---

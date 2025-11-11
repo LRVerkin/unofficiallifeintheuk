@@ -19,6 +19,7 @@ Keep it fast, simple, and delightful (humour, contextual explanations).
 Make it trivially shareable (social preview cards, share link with score, persona reveal).
 Provide an easy path for players to submit feedback and new question ideas without having to create an account.
 Require no signup; store nothing personally identifiable in MVP beyond an optional contact email passed straight through in feedback replies.
+- Rely exclusively on free/open-source tooling or free SaaS tiers for the MVP (e.g., Next.js, Tailwind, pnpm, Plausible free tier, Resend free allotment); any paid upgrades are out of scope unless owners approve later.
 
 **Non-Goals (MVP)**
 No login, accounts, leaderboards, or payment.
