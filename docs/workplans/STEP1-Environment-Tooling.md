@@ -26,8 +26,8 @@ We need a reproducible Next.js 15 + TypeScript workspace with all developer tool
 
 ## Implementation Checklist
 ### Tasks for You (Local machine setup)
-- [ ] Install Node.js ≥20.11 (use `nvm`, `fnm`, or installer) and verify via `node -v`.
-- [ ] Install pnpm globally (`corepack enable` preferred) and verify via `pnpm -v`.
+- [X] Install Node.js ≥20.11 (use `nvm`, `fnm`, or installer) and verify via `node -v`.
+- [X] Install pnpm globally (`corepack enable` preferred) and verify via `pnpm -v`.
 - [ ] Confirm you can run `pnpm install` locally once the repo changes land (ensures toolchain permissions).
 
 ### Tasks for Codex (repo scaffolding & config)
