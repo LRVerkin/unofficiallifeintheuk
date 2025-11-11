@@ -169,7 +169,7 @@ export interface FeedbackSubmission {
 ```ts
 // lib/quiz/session.ts
 export interface QuizConfig {
-  questionCount: number;     // e.g., 10
+  questionCount: number;     // e.g., 24 in MVP
   passThreshold: number;     // e.g., 0.75
   seed?: string;             // deterministic seed persisted per session
 }
@@ -224,7 +224,7 @@ export interface QuizResult {
 ---
 
 ## 7. Quiz Engine Behaviour
-1. **Sampling**: `sampler.ts` shuffles the full bank with Fisher-Yates and slices to `quizConfig.questionCount`, seeded using the session’s stored seed so the same seed yields identical sets. Ensure rank/multiple questions still included evenly by weighting tags if required later.
+1. **Sampling**: `sampler.ts` shuffles the full bank with Fisher-Yates and slices to `quizConfig.questionCount`, seeded using the session’s stored seed so the same seed yields identical sets. Launch data contains 24 total questions, so every session currently yields the same set; keeping the sampling infrastructure ensures future question-bank expansions work without code changes. Ensure rank/multiple questions still included evenly by weighting tags if required later.
 2. **Answer capture**: Each renderer emits canonical `Answer` objects. Controlled inputs provide validation feedback (e.g., multi-select requires at least one option).
 3. **Progression**: `useQuizSession` reducer tracks current index, visited questions, and enforces required answers before allowing submission; persists `answers` + last visited question to `sessionStorage`.
 4. **Scoring** (`scoring.ts`):
@@ -233,8 +233,8 @@ export interface QuizResult {
    - Rank: deep equality of array order unless rule overrides.
    - Text: normalise according to `textConfig` (trim, lower, collapse whitespace, strip punctuation). Expand `correct` array with synonyms and optionally compute a Levenshtein ratio when `fuzzyThreshold` is present.
    - Special rules evaluated per question; they can override correctness (e.g., `acceptRange` for arrival times).
-5. **Results**: Calculated result stored in session and passed via router state to `/results`. Map `percentage` to a `Persona` (from `data/personas.ts`), derive `diplomaAsset` + share card content, and persist with the result payload. Include the `seed` in router state so that future features can recreate the exact quiz. Query param fallback (e.g., `?score=7&total=10&seed=abc123`) for share links; sanitise inputs when hydrating results page.
-6. **Feedback submissions**: Standalone hook posts to `/api/feedback` with `FeedbackSubmission`. Route validates payload, checks honeypot/rate-limit guard, and invokes the email provider to deliver the message to `feedback@unofficiallifeintheuk.com`. Return JSON success/error for optimistic UI updates.
+5. **Results**: Calculated result stored in session and passed via router state to `/results`. Map `percentage` to a `Persona` (from `data/personas.ts`), derive `diplomaAsset` + share card content, and persist with the result payload. Include the `seed` in router state so that future features can recreate the exact quiz. Query param fallback (e.g., `?score=18&total=24&seed=abc123`) for share links; sanitise inputs when hydrating results page.
+6. **Feedback submissions**: Standalone hook posts to `/api/feedback` with `FeedbackSubmission`. Route validates payload (including optional email), checks honeypot/rate-limit guard, and invokes the email provider to deliver the message to `feedback@unofficiallifeintheuk.com` with the email noted or “anonymous” when omitted. Return JSON success/error for optimistic UI updates.
 7. **Session exit tracking**: `useQuizSession` registers `visibilitychange`/`beforeunload` listeners to fire a `question_exit` analytics event with the last viewed question id and elapsed time when users abandon mid-quiz (debounced to avoid duplicate firing).
 
 ---
@@ -253,7 +253,7 @@ export interface QuizResult {
   - Secondary CTAs: `RetakeButton`, `KoFiLink`, and `FeedbackButton` linking to `/feedback`.
 - **`/feedback`**:
   - Server component shell with `FeedbackForm` client component.
-  - Form includes textarea, optional email input, hidden honeypot. Client validation ensures minimum length before POST.
+  - Form includes textarea, optional single-line email input, character counter, and hidden honeypot. Client validation ensures minimum length before POST and email format checks when provided.
   - On submit, call `/api/feedback`; optimistic success message plus fallback mailto link.
 - **Global layout**: `app/layout.tsx` sets fonts (e.g., CSS variable fonts via `next/font`), theme colours, analytics include.
 - **Design system primitives**: Buttons, card, alert, progress indicator, tooltip, etc., exported from `components/ui`.
@@ -360,7 +360,7 @@ export interface QuizResult {
 - No storage of personal data; results only in browser session.
 - CSP headers via Next middleware: script-src includes Plausible, self.
 - Validate all query parameters on `/results` to prevent XSS; never render untrusted strings without escaping.
-- Feedback endpoint enforces honeypot, rate limiting, and input sanitisation; email body strips script tags and caps length before forwarding.
+- Feedback endpoint enforces honeypot, rate limiting, and input sanitisation; it forwards the optional user email alongside the message body (flagged as anonymous when omitted), strips script tags, and caps length before emailing so nothing is persisted server-side.
 - Dependabot (or Renovate) to keep dependencies updated.
 
 ---
