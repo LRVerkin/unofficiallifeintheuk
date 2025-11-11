@@ -35,6 +35,7 @@ We need a reproducible Next.js 15 + TypeScript workspace with all developer tool
 - [x] Install Node.js ≥20.11 (use `nvm`, `fnm`, or installer) and verify via `node -v`.
 - [x] Install pnpm globally (`corepack enable` preferred) and verify via `pnpm -v`.
 - [x] Confirm you can run `pnpm install` locally once the repo changes land (ensures toolchain permissions).
+- [x] Copy `.env.example` → `.env` locally and populate Ko-fi + analytics fields when you have the values; `RESEND_API_KEY` can remain blank until Step 7 wires up feedback email.
 
 ### Tasks for Codex (repo scaffolding & config)
 
@@ -87,3 +88,4 @@ We need a reproducible Next.js 15 + TypeScript workspace with all developer tool
 ## Notes
 
 - `git config core.hooksPath .husky` (or rerun `pnpm prepare`) must be executed locally to activate Husky because the CLI could not modify `.git/config` inside this environment.
+- Resend/Postmark credentials and Plausible domain setup will occur with Step 7–8; the `.env` placeholders exist now so you can populate them once those services are configured.
