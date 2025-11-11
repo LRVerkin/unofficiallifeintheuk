@@ -3,9 +3,11 @@
 **Task ID**: STEP-1-Environment
 
 ## Problem Statement
+
 We need a reproducible Next.js 15 + TypeScript workspace with all developer tooling (package manager, styling, linting, testing hooks, documentation) so future feature work can be implemented confidently and consistently.
 
 ## Proposed Implementation
+
 - Standardise the local toolchain on Node.js LTS (≥20.11) and pnpm; document the exact install commands and verification steps in `README.md`.
 - Scaffold a new Next.js App Router project with the directory structure defined in `docs/Architecture.md`, pre-creating placeholder folders (`app`, `components`, `data`, `lib`, `tests`).
 - Configure TypeScript (`tsconfig.json`) with `strict` mode, path aliases (`@/*`), and test-specific compiler options to support Vitest/Playwright later.
@@ -15,6 +17,7 @@ We need a reproducible Next.js 15 + TypeScript workspace with all developer tool
 - Smoke-test the dev server (`pnpm dev`) and document the entire setup process in `README.md` to unblock collaborators.
 
 ## Components Involved
+
 - Tooling & DX (Node.js, pnpm, Husky, lint-staged)
 - Next.js project scaffold (`app`, `components`, `lib`, `tests`)
 - Styling stack (Tailwind CSS, PostCSS)
@@ -22,29 +25,35 @@ We need a reproducible Next.js 15 + TypeScript workspace with all developer tool
 - Documentation (`README.md`, workspace settings)
 
 ## Dependencies
+
 - None (foundational step).
 
 ## Implementation Checklist
+
 ### Tasks for You (Local machine setup)
-- [X] Install Node.js ≥20.11 (use `nvm`, `fnm`, or installer) and verify via `node -v`.
-- [X] Install pnpm globally (`corepack enable` preferred) and verify via `pnpm -v`.
-- [ ] Confirm you can run `pnpm install` locally once the repo changes land (ensures toolchain permissions).
+
+- [x] Install Node.js ≥20.11 (use `nvm`, `fnm`, or installer) and verify via `node -v`.
+- [x] Install pnpm globally (`corepack enable` preferred) and verify via `pnpm -v`.
+- [x] Confirm you can run `pnpm install` locally once the repo changes land (ensures toolchain permissions).
 
 ### Tasks for Codex (repo scaffolding & config)
-- [ ] Update `README.md` prerequisites section with Node.js/pnpm install + verification instructions.
-- [ ] Initialise Next.js App Router project (`pnpm create next-app` or manual scaffold) with TypeScript and App Router enabled.
-- [ ] Create required directories (`app`, `components`, `data`, `lib`, `tests`) plus placeholder files to keep Git happy.
-- [ ] Configure `tsconfig.json` with `strict`, `moduleResolution: bundler`, path aliases for `@/components`, `@/lib`, `@/data`, and a testing-focused `tsconfig.test.json`.
-- [ ] Install Tailwind CSS + PostCSS + autoprefixer; create `postcss.config.js`, `tailwind.config.ts`, and seed `globals.css` with Tailwind layers.
-- [ ] Add ESLint (Next config), Prettier, Stylelint (optional) plus shared config files; ensure `package.json` scripts `lint`, `typecheck`, `format` exist.
-- [ ] Configure Husky + lint-staged via `pnpm dlx husky-init` (or manual) and add pre-commit hook running `pnpm lint-staged`.
-- [ ] Add `.env.example` documenting `RESEND_API_KEY`, `PLAUSIBLE_DOMAIN`, `KO_FI_URL`, etc., and reference it in `README.md`.
-- [ ] Add `.vscode/extensions.json` and `.vscode/settings.json` (format on save, suggested extensions).
+
+- [x] Update `README.md` prerequisites section with Node.js/pnpm install + verification instructions.
+- [x] Initialise Next.js App Router project (`pnpm create next-app` or manual scaffold) with TypeScript and App Router enabled.
+- [x] Create required directories (`app`, `components`, `data`, `lib`, `tests`) plus placeholder files to keep Git happy.
+- [x] Configure `tsconfig.json` with `strict`, `moduleResolution: bundler`, path aliases for `@/components`, `@/lib`, `@/data`, and a testing-focused `tsconfig.test.json`.
+- [x] Install Tailwind CSS + PostCSS + autoprefixer; create `postcss.config.js`, `tailwind.config.ts`, and seed `globals.css` with Tailwind layers.
+- [x] Add ESLint (Next config), Prettier, Stylelint (optional) plus shared config files; ensure `package.json` scripts `lint`, `typecheck`, `format` exist.
+- [x] Configure Husky + lint-staged and add a pre-commit hook running `pnpm lint-staged`.
+- [x] Add `.env.example` documenting `RESEND_API_KEY`, `PLAUSIBLE_DOMAIN`, `KO_FI_URL`, etc., and reference it in `README.md`.
+- [x] Add `.vscode/extensions.json` and `.vscode/settings.json` (format on save, suggested extensions).
 
 ### Shared / Verification
-- [ ] Run `pnpm install`, `pnpm lint`, `pnpm typecheck`, and `pnpm dev` to confirm the scaffold works; Codex can prep scripts and you can re-run locally as a sanity check.
+
+- [x] Run `pnpm install`, `pnpm lint`, `pnpm typecheck`, and `pnpm dev` to confirm the scaffold works; Codex can prep scripts and you can re-run locally as a sanity check.
 
 ## Verification Steps
+
 - `node -v` (should be ≥20.11)
 - `pnpm -v` (should match latest LTS)
 - `pnpm install`
@@ -53,23 +62,28 @@ We need a reproducible Next.js 15 + TypeScript workspace with all developer tool
 - `pnpm dev` (confirm http://localhost:3000 responds with placeholder page)
 
 ## Decision Authority
+
 - Independent: choice of exact Node.js manager, pnpm install method, folder bootstrap commands, lint rule presets, Tailwind plugin selection, Husky/lint-staged configuration.
 - Requires user input: introducing paid tooling/services, deviating from Next.js + Tailwind baseline, or skipping any checklist item for schedule reasons.
 
 ## Questions / Uncertainties
+
 - **Blocking**: None identified.
 - **Non-blocking**:
   - Should Stylelint be included now or deferred until CSS volume increases? (Assume include per plan unless user objects.)
   - Preferred convention for `.nvmrc`? (Default to latest LTS if no guidance.)
 
 ## Acceptable Tradeoffs
+
 - Use default Next.js ESLint config as a base even if custom rules are refined later.
 - Skip Storybook or other heavy tooling until the design system (Step 4) demands it.
 - Placeholder Tailwind tokens may be minimal provided structure is ready for expansion (e.g., define `colors.brand` and `fontFamily.display` entries even if they temporarily map to default Tailwind values so future branding simply swaps the values rather than refactoring config).
 - All tooling choices rely on free/open-source options; no paid services are required for this step.
 
 ## Status
-- Not Started
+
+- Completed
 
 ## Notes
-- Populate with setup gotchas (e.g., `corepack enable`) once work begins.
+
+- `git config core.hooksPath .husky` (or rerun `pnpm prepare`) must be executed locally to activate Husky because the CLI could not modify `.git/config` inside this environment.
