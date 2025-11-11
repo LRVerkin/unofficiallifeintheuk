@@ -1,6 +1,12 @@
 # Unofficial Life in the UK
 
-A fast, tongue-in-cheek Life in the UK quiz built with Next.js 16, TypeScript, Tailwind CSS, and an automated content pipeline.
+**Could you become a UK citizen?**
+Take [ACTUAL Life in the UK](https://lifeintheuktestweb.co.uk/) test and find out!
+
+_Life in the UK_ is an official test you must pass to gain British citizenship.  
+It's famous for having nothing to do with real life in the UK — most of your British friends couldn’t pass it without studying.
+
+Our **ACTUAL Life in the UK** test has no 1988 Olympics, no Tower of London construction: only REAL classics from the REAL United Kingdom!
 
 ## Requirements
 
