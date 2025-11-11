@@ -18,7 +18,8 @@ Let users take a single quiz run (24 questions in MVP) and instantly see results
 Keep it fast, simple, and delightful (humour, contextual explanations).
 Make it trivially shareable (social preview cards, share link with score, persona reveal).
 Provide an easy path for players to submit feedback and new question ideas without having to create an account.
-Require no signup; store nothing personally identifiable in MVP.
+Require no signup; store nothing personally identifiable in MVP beyond an optional contact email passed straight through in feedback replies.
+- Rely exclusively on free/open-source tooling or free SaaS tiers for the MVP (e.g., Next.js, Tailwind, pnpm, Plausible free tier, Resend free allotment); any paid upgrades are out of scope unless owners approve later.
 
 **Non-Goals (MVP)**
 No login, accounts, leaderboards, or payment.
@@ -28,7 +29,7 @@ No localisation beyond UK English.
 ### 3) Scope (MVP Features)
 **Home page**: brief intro, one primary CTA: Big button on a Union Jack flag: TAKE THE TEST, brief disclaimer that it’s a parody of the official “Life in the UK” test. Footer carries subtle links to Ko-fi support and “Suggest a question / give feedback”.
 
-**Quiz flow**: 24 questions, randomly sampled and shuffled per session from the bank of questions.
+**Quiz flow**: 24 questions per run, randomly sampled and shuffled per session from the bank of questions. (For launch we only have 24 authored questions, so every run currently uses the full set; the sampling mechanics stay in place so adding more questions later requires no product or code changes.)
 
 **Question types supported in MVP**: Single choice, multiple choice, ranking, and free text short answers. Free text answers must trim whitespace, ignore case, tolerate simple punctuation differences, and support per-question synonym lists supplied by content editors.
 
@@ -52,7 +53,7 @@ Celebratory treatment on success (“You’re as British as…”). Show a share
 **SEO**: title/meta, open graph, sitemap, robots.txt.
 
 **Feedback & Suggestions page**:
-Linked from the home page footer and the success screen. Provides context, a large free-text box for feedback/new questions (min. 200 character support, optional contact email field), and a submit action. Successful submission confirms on page and sends content to the project feedback inbox.
+Linked from the home page footer and the success screen. Provides context plus a large free-text box for feedback/new questions (min. 200 character support) and a submit action, alongside an optional one-line email field. If a player enters their email, it’s included inside the forwarded message so you can reply; otherwise the submission is explicitly labelled as anonymous. Successful submission confirms on page and sends the payload to the project feedback inbox via a forwarding email address—no data is persisted after the email fires.
 
 ### 4) Question Bank (Source of Truth)
 Source: QuestionBank.md
@@ -63,7 +64,7 @@ id, type (single, multiple, rank, text), prompt, options (if any), correct (inde
 
 
 ### 5) Scoring & Rules
-Default: +1 for each correctly answered question.
+Default: +1 for each correctly answered question; each run covers 24 questions unless the configurable `questionCount` is changed.
 
 Multi-select: require all correct and no incorrect, unless the bank flags “allow partial”.
 
@@ -105,7 +106,7 @@ Lighthouse ≥ 95 on Performance, Accessibility, Best Practices.
 Render in under 1s on 4G; JS bundle < 150KB gz (target).
 
 ### 9) Security & Privacy
-No PII collected in MVP.
+No PII stored in MVP. The optional feedback email field is forwarded inside the transactional email (so you can reply) and discarded immediately afterward.
 
 Cookie-less analytics (e.g., Plausible mode without cookies).
 
@@ -124,7 +125,7 @@ Third-party attributions: the tea-making credit note you left (confirm before pu
 
 ### 12) Acceptance Criteria (MVP “Definition of Done”)
 
-A user on mobile can start quiz, answer 10 mixed question types, submit, and view results with per-question feedback—all within ~60–90 seconds, with no layout jank.
+A user on mobile can start quiz, answer 24 mixed question types, submit, and view results with per-question feedback—all within ~60–90 seconds, with no layout jank.
 
 Ranking and multi-select behave exactly as defined per item.
 
@@ -154,6 +155,6 @@ Per-choice feedback: render after submission on Results page (not during test), 
 
 Persona selection: configurable map of score brackets → persona metadata (name, blurb, asset paths) rendered in diploma card component.
 
-Feedback submissions call a serverless route that validates content, applies spam protection (honeypot + rate limit), and forwards the payload to `feedback@unofficiallifeintheuk.com` via transactional email (e.g., Resend or Postmark).
+Feedback submissions call a serverless route that validates content, applies spam protection (honeypot + rate limit), and forwards the payload to `feedback@unofficiallifeintheuk.com` via transactional email (e.g., Resend or Postmark). If the user supplies their email, it is inserted into the forwarded message body and discarded immediately afterward; otherwise the message is marked anonymous, so no PII is stored beyond the outbound email.
 
 Analytics capture `question_exit` events (last question visited when a session ends early) so content/design can identify weak questions.

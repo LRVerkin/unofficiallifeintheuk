@@ -45,7 +45,7 @@
 3. Integrate the generator into `pnpm build`, `pnpm prepare`, and a dedicated `pnpm generate:questions` script; fail builds on validation errors.
 4. Add snapshot tests to ensure generator output stability and example-driven parsing edge cases (multi-select, rank, text fuzzy rules).
 5. Author `data/personas.ts` with metadata, score brackets, and asset references; include schema validation to prevent gaps or overlaps.
-6. Document the content editing workflow (update Markdown → run generator → run tests) in `docs/README.md` or `CONTRIBUTING.md`.
+6. Document the content editing workflow (update Markdown → run generator → run tests) in `docs/README.md` or `CONTRIBUTING.md`, including a note that the launch bank currently matches the 24-question run but the tooling already supports larger pools.
 
 **Deliverables**
 - Typed `data/questions.ts` generated from Markdown with automated validation.
@@ -123,13 +123,14 @@
 **Goal**: Implement the `/results` experience that communicates outcomes, personas, and sharing options as specified in the PRD.
 
 **Key Tasks**
-1. Create `app/results/page.tsx` consuming router state or query params; sanitize inputs and handle missing session fallbacks.
-2. Build `ResultsSummary` component displaying score, pass/fail messaging, elapsed time (if available), and CTAs.
-3. Implement `DiplomaCard` with persona artwork, shareable summary, and optional download/print styles.
-4. Develop breakdown components to render each question with chosen answer, correctness status, and contextual feedback from the bank.
-5. Add `ShareResult` component: copy-to-clipboard, Web Share API integration, and share metadata generation.
-6. Provide quick actions (Retake, Feedback, Ko-fi) with analytics events.
-7. Write integration tests verifying persona selection, share payloads, and breakdown rendering; add accessibility snapshot for tab order.
+1. Commission or produce the persona/diploma artwork assets (illustrations, responsive variants, export specs) and document licensing/attribution notes.
+2. Create `app/results/page.tsx` consuming router state or query params; sanitize inputs and handle missing session fallbacks.
+3. Build `ResultsSummary` component displaying score, pass/fail messaging, elapsed time (if available), and CTAs.
+4. Implement `DiplomaCard` with persona artwork, shareable summary, and optional download/print styles.
+5. Develop breakdown components to render each question with chosen answer, correctness status, and contextual feedback from the bank.
+6. Add `ShareResult` component: copy-to-clipboard, Web Share API integration, and share metadata generation.
+7. Provide quick actions (Retake, Feedback, Ko-fi) with analytics events.
+8. Write integration tests verifying persona selection, share payloads, and breakdown rendering; add accessibility snapshot for tab order.
 
 **Deliverables**
 - Results route matching PRD feature list with tested share functionality.
@@ -144,8 +145,8 @@
 
 **Key Tasks**
 1. Create `app/feedback/page.tsx` server component shell with context copy and SEO metadata.
-2. Implement `FeedbackForm` client component featuring textarea (min length, character counter), optional email field, and honeypot input.
-3. Build `/app/api/feedback/route.ts` (or server action) validating payload with Zod, enforcing rate limiting, and invoking Resend/Postmark SDK.
+2. Implement `FeedbackForm` client component featuring textarea (min length, character counter), optional single-line email input, and honeypot field; flag submissions as anonymous when the email box is left empty.
+3. Build `/app/api/feedback/route.ts` (or server action) validating payload with Zod (including optional email), enforcing rate limiting, and invoking Resend/Postmark SDK.
 4. Implement `lib/feedback/send-feedback.ts` and `lib/feedback/rate-limit.ts` per architecture, with dependency injection for provider.
 5. Add optimistic UI states (pending, success, error) and fallback mailto link for failures.
 6. Configure environment handling for API keys; ensure keys excluded from client bundles.
@@ -226,10 +227,11 @@
 **Key Tasks**
 1. Conduct final QA sweep: cross-browser/device testing, accessibility review (keyboard, screen reader), performance budget validation (<1s TTI, bundle size checks).
 2. Run content proofreading for humour tone, correctness, and persona descriptions; confirm assets meet licensing requirements.
-3. Validate analytics tracking end-to-end in staging and production-like environments.
-4. Prepare launch assets: social preview screenshots, announcement copy, FAQs.
-5. Establish backlog triage process for post-launch feedback, bug tracking, and prioritisation of enhancements (e.g., share tokens, dark mode).
-6. Schedule post-launch monitoring window with on-call coverage and metrics review.
+3. Verify the “proper way to brew tea” credit/permission requirement (George McGowan attribution) is satisfied before publishing.
+4. Validate analytics tracking end-to-end in staging and production-like environments.
+5. Prepare launch assets: social preview screenshots, announcement copy, FAQs.
+6. Establish backlog triage process for post-launch feedback, bug tracking, and prioritisation of enhancements (e.g., share tokens, dark mode).
+7. Schedule post-launch monitoring window with on-call coverage and metrics review.
 
 **Deliverables**
 - Signed-off MVP ready for public release with supporting documentation.
@@ -243,4 +245,3 @@
 1. Review and refine this plan with stakeholders to confirm scope and sequencing.
 2. Create task tickets aligned with each step’s key tasks for backlog tracking.
 3. Kick off Step 1 to establish the development environment and baseline tooling.
-
