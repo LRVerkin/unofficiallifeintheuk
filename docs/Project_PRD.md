@@ -1,10 +1,12 @@
 # Product Requirements Document (PRD): Unofficial Life in the UK
 
-## High level description 
-### 1) Summary
-A tongue-in-cheek, responsive website where visitors take a short quiz about “real” UK life and receive an instant score with witty feedback. The experience is lightweight, fast, and mobile-first. 
+## High level description
 
-**Pitch**: 
+### 1) Summary
+
+A tongue-in-cheek, responsive website where visitors take a short quiz about “real” UK life and receive an instant score with witty feedback. The experience is lightweight, fast, and mobile-first.
+
+**Pitch**:
 Life in the UK is an official test you must pass to gain British citizenship. It's famous for having nothing to do with real life in the UK, to the point most of your British friends couldn't pass without studying.
 
 Our ACTUAL Life in the UK test has no 1988 Olympics, no Tower of London construction:
@@ -13,12 +15,14 @@ only REAL classics from the REAL United Kingdom!
 Could you become a UK citizen? Take the ACTUAL Life in the UK test and find out!
 
 ### 2) Goals & Non-Goals
+
 **Goals**
 Let users take a single quiz run (24 questions in MVP) and instantly see results.
 Keep it fast, simple, and delightful (humour, contextual explanations).
 Make it trivially shareable (social preview cards, share link with score, persona reveal).
 Provide an easy path for players to submit feedback and new question ideas without having to create an account.
 Require no signup; store nothing personally identifiable in MVP beyond an optional contact email passed straight through in feedback replies.
+
 - Rely exclusively on free/open-source tooling or free SaaS tiers for the MVP (e.g., Next.js, Tailwind, pnpm, Plausible free tier, Resend free allotment); any paid upgrades are out of scope unless owners approve later.
 
 **Non-Goals (MVP)**
@@ -27,6 +31,7 @@ No question authoring UI (the bank is static JSON in MVP).
 No localisation beyond UK English.
 
 ### 3) Scope (MVP Features)
+
 **Home page**: brief intro, one primary CTA: Big button on a Union Jack flag: TAKE THE TEST, brief disclaimer that it’s a parody of the official “Life in the UK” test. Footer carries subtle links to Ko-fi support and “Suggest a question / give feedback”.
 
 **Quiz flow**: 24 questions per run, randomly sampled and shuffled per session from the bank of questions. (For launch we only have 24 authored questions, so every run currently uses the full set; the sampling mechanics stay in place so adding more questions later requires no product or code changes.)
@@ -56,14 +61,15 @@ Celebratory treatment on success (“You’re as British as…”). Show a share
 Linked from the home page footer and the success screen. Provides context plus a large free-text box for feedback/new questions (min. 200 character support) and a submit action, alongside an optional one-line email field. If a player enters their email, it’s included inside the forwarded message so you can reply; otherwise the submission is explicitly labelled as anonymous. Successful submission confirms on page and sends the payload to the project feedback inbox via a forwarding email address—no data is persisted after the email fires.
 
 ### 4) Question Bank (Source of Truth)
+
 Source: QuestionBank.md
 
- Each question includes:
+Each question includes:
 
 id, type (single, multiple, rank, text), prompt, options (if any), correct (index/indices or ordered array for ranking), feedback (per option and/or per outcome), required (bool), tags (e.g., “food”, “language”), and any special rules (like “if answer < 1:30pm, mark as ‘optimistic—count it’”).
 
-
 ### 5) Scoring & Rules
+
 Default: +1 for each correctly answered question; each run covers 24 questions unless the configurable `questionCount` is changed.
 
 Multi-select: require all correct and no incorrect, unless the bank flags “allow partial”.
@@ -98,7 +104,10 @@ Empty/error states: show graceful message if question bank fails to load. Feedba
 
 `/feedback` Form to submit suggestions and free-text feedback.
 
+`/about` Page introducing the creators, optional social links, and a prompt/CTA directing visitors to the feedback form.
+
 ### 8) Accessibility & Performance
+
 WCAG AA target. Labels for radios/checkboxes, semantic headings, skip-to-content.
 
 Lighthouse ≥ 95 on Performance, Accessibility, Best Practices.
@@ -106,6 +115,7 @@ Lighthouse ≥ 95 on Performance, Accessibility, Best Practices.
 Render in under 1s on 4G; JS bundle < 150KB gz (target).
 
 ### 9) Security & Privacy
+
 No PII stored in MVP. The optional feedback email field is forwarded inside the transactional email (so you can reply) and discarded immediately afterward.
 
 Cookie-less analytics (e.g., Plausible mode without cookies).
@@ -113,12 +123,14 @@ Cookie-less analytics (e.g., Plausible mode without cookies).
 No server-side state required; all scoring client-side.
 
 ### 10) Observability / Metrics
+
 -- measuring how people actually use the site
 DAU/MAU, quiz start rate, finish rate, avg score, share click rate.
 
 Per-question difficulty (correct %), dwell time, rage clicks (optional), and drop-off (last question reached before exit).
 
 ### 11) Risks & Legal Notes
+
 Parody/fair use: Prominent disclaimer that this is unofficial and humorous.
 
 Third-party attributions: the tea-making credit note you left (confirm before publish).

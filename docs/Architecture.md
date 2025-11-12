@@ -250,7 +250,10 @@ export interface QuizResult {
 
 ## 8. Page & Component Architecture
 
-- **`/` (Home)**: Static page, `generateMetadata()` for SEO/social; hero CTA button links to `/quiz`. Footer includes `KoFiLink` component and subtle link to `/feedback`.
+- **`/` (Home)**: Static page, `generateMetadata()` for SEO/social; hero section presents the ACTUAL Life in the UK pitch excerpt (from `docs/Unofficial Life in the UK - Pitch.md`) with CTA button linking to `/quiz`. Footer includes `KoFiLink` component and prominent link to `/feedback`.
+- **`/about`**:
+  - Lightweight introduction to the creators (Louise & Quentin) with optional social link placeholders.
+  - Includes CTA pointing users to `/feedback` for suggestions/questions.
 - **`/quiz`**:
   - `QuizShell`: wraps header/footer, orchestrates session.
   - `QuestionRenderer`: delegates to type-specific components (`SingleChoiceQuestion`, `MultipleChoiceQuestion`, `RankQuestion` with accessible drag-and-drop via `@dnd-kit/core`, `TextQuestion`).

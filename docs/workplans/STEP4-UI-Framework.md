@@ -38,7 +38,7 @@ The app needs shared layout primitives, typography, form controls, and accessibi
 - [x] Build `SiteFooter` including parody disclaimer, privacy note placeholder, and social/legal links per PRD.
 - [x] Implement UI primitives: Button variants, Card, Input, Checkbox, RadioGroup, ProgressBar, Tooltip, Alert; include story/demo or MDX docs.
 - [x] Create CTA helpers (KoFiLink, ShareButtons) with prop-driven analytics event triggers.
-- [ ] Add unit/visual regression tests where practical (e.g., Storybook stories with Chromatic optional later).
+- [ ] Add unit/visual regression tests where practical (**deferred to Step 9 testing workplan**).
 - [x] Document component guidelines (usage, accessibility notes) in `docs/DesignSystem.md` (create dedicated file now for easier future edits).
 
 ## Verification Steps
