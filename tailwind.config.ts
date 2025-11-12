@@ -13,6 +13,9 @@ const config: Config = {
           primary: "#D4003C",
           secondary: "#012169",
           accent: "#FFB81C",
+          flagBlue: "#012169",
+          flagRed: "#C8102E",
+          flagWhite: "#FFFFFF",
         },
         surface: {
           DEFAULT: "#FFFFFF",

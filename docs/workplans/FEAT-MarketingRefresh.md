@@ -31,14 +31,14 @@ The current marketing layout does not match the desired tone: header text lacks 
 
 ## Implementation Checklist
 
-- [ ] Adjust color tokens / CSS so header + hero text meet contrast requirements.
-- [ ] Update `SiteHeader` to contain only: placeholder logo/title linking to `/`, new “About” link, and `Button` labeled “Take the Test”.
-- [ ] Add `app/about/page.tsx` with brief copy about the creators, social link placeholders, and a link to `/feedback`.
-- [ ] Replace hero copy with the supplied pitch text, with adapted formatting from `docs/Unofficial Life in the UK - Pitch.md`. The part from "Could you become a UK citizen?" to "classics from the REAL United Kingdom!".
-- [ ] Style the hero “Take the Test” button with a British-flag background (CSS gradient or inline asset) while keeping text accessible.
-- [ ] Remove the Ko-fi CTA from the hero section and place it inside the footer next to a “Suggest more questions / leave feedback” link.
-- [ ] Delete the feature cards grid from the home page.
-- [ ] Verify layout responsiveness after changes (mobile/tablet/desktop).
+- [x] Adjust color tokens / CSS so header + hero text meet contrast requirements.
+- [x] Update `SiteHeader` to contain only: placeholder logo/title linking to `/`, new “About” link, and `Button` labeled “Take the Test”.
+- [x] Add `app/about/page.tsx` with brief copy about the creators, social link placeholders, and a link to `/feedback`.
+- [x] Replace hero copy with the supplied pitch text, with adapted formatting from `docs/Unofficial Life in the UK - Pitch.md`. The part from "Could you become a UK citizen?" to "classics from the REAL United Kingdom!".
+- [x] Style the hero “Take the Test” button with a British-flag background (CSS gradient or inline asset) while keeping text accessible.
+- [x] Remove the Ko-fi CTA from the hero section and place it inside the footer next to a “Suggest more questions / leave feedback” link.
+- [x] Delete the feature cards grid from the home page.
+- [x] Verify layout responsiveness after changes (mobile/tablet/desktop).
 
 ## Verification Steps
 
@@ -65,7 +65,7 @@ The current marketing layout does not match the desired tone: header text lacks 
 
 ## Status
 
-- Not Started
+- Completed
 
 ## Notes
 

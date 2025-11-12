@@ -1,11 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 
-const NAV_LINKS = [
-  { href: "#quiz", label: "Quiz" },
-  { href: "#results", label: "Results" },
-  { href: "#feedback", label: "Feedback" },
-];
+const NAV_LINKS = [{ href: "/about", label: "About" }];
 
 export function SiteHeader() {
   return (
@@ -22,7 +18,7 @@ export function SiteHeader() {
           ))}
         </nav>
         <Button asChild variant="secondary" size="sm">
-          <Link href="#quiz">Start Quiz</Link>
+          <Link href="/quiz">Take the Test</Link>
         </Button>
       </div>
     </header>

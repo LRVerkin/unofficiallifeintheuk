@@ -38,6 +38,21 @@ label {
   font-weight: 500;
 }
 
+.flag-button {
+  background:
+    linear-gradient(135deg, var(--color-border) 46%, rgb(0 0 0 / 0) 46%),
+    linear-gradient(45deg, var(--color-border) 46%, rgb(0 0 0 / 0) 46%),
+    linear-gradient(0deg, #c8102e 50%, #012169 50%);
+  color: white;
+  border: none;
+  background-position: left, right, center;
+  background-size:
+    50% 100%,
+    50% 100%,
+    100% 100%;
+  background-repeat: no-repeat;
+}
+
 .skip-link {
   position: absolute;
   top: -40px;
