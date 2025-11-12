@@ -31,15 +31,15 @@ The app needs shared layout primitives, typography, form controls, and accessibi
 
 ## Implementation Checklist
 
-- [ ] Finalise Tailwind config tokens (colors, spacing, typography scale, motion preferences) referenced by design system.
-- [ ] Update `app/globals.css` with Tailwind base/components/utilities layers plus custom properties and accessibility resets.
-- [ ] Implement `app/layout.tsx` with Next fonts, metadata defaults, skip-to-content link, header/footer slots, and Plausible script placeholder.
-- [ ] Build `SiteHeader` (logo, navigation anchors, Ko-fi link slot) following accessibility requirements.
-- [ ] Build `SiteFooter` including parody disclaimer, privacy note placeholder, and social/legal links per PRD.
-- [ ] Implement UI primitives: Button variants, Card, Input, Checkbox, RadioGroup, ProgressBar, Tooltip, Alert; include story/demo or MDX docs.
-- [ ] Create CTA helpers (KoFiLink, ShareButtons) with prop-driven analytics event triggers.
+- [x] Finalise Tailwind config tokens (colors, spacing, typography scale, motion preferences) referenced by design system.
+- [x] Update `app/globals.css` with Tailwind base/components/utilities layers plus custom properties and accessibility resets.
+- [x] Implement `app/layout.tsx` with Next fonts, metadata defaults, skip-to-content link, header/footer slots, and Plausible script placeholder.
+- [x] Build `SiteHeader` (logo, navigation anchors, Ko-fi link slot) following accessibility requirements.
+- [x] Build `SiteFooter` including parody disclaimer, privacy note placeholder, and social/legal links per PRD.
+- [x] Implement UI primitives: Button variants, Card, Input, Checkbox, RadioGroup, ProgressBar, Tooltip, Alert; include story/demo or MDX docs.
+- [x] Create CTA helpers (KoFiLink, ShareButtons) with prop-driven analytics event triggers.
 - [ ] Add unit/visual regression tests where practical (e.g., Storybook stories with Chromatic optional later).
-- [ ] Document component guidelines (usage, accessibility notes) in `docs/DesignSystem.md` (create dedicated file now for easier future edits).
+- [x] Document component guidelines (usage, accessibility notes) in `docs/DesignSystem.md` (create dedicated file now for easier future edits).
 
 ## Verification Steps
 
@@ -67,7 +67,7 @@ The app needs shared layout primitives, typography, form controls, and accessibi
 
 ## Status
 
-- Not Started
+- Completed
 
 ## Notes
 

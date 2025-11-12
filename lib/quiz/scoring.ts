@@ -39,19 +39,20 @@ function similarity(a: string, b: string) {
   return maxLen === 0 ? 1 : 1 - distance / maxLen;
 }
 
-export function isResponseCorrect(
-  question: QuizQuestion,
-  response?: QuestionResponse,
-): boolean {
+export function isResponseCorrect(question: QuizQuestion, response?: QuestionResponse): boolean {
   if (!response || response.status !== "answered") return false;
   switch (question.type) {
     case "single":
+      if (response.type !== "single") return false;
       return question.correct.includes(response.value ?? NaN);
     case "multiple":
+      if (response.type !== "multiple") return false;
       return compareSets(question.correct, response.value);
     case "rank":
+      if (response.type !== "rank") return false;
       return compareSets(question.correct, response.value, true);
     case "text":
+      if (response.type !== "text") return false;
       return matchTextAnswer(question, response.value);
     default:
       return false;

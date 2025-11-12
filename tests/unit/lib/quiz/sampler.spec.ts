@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import { pickQuestions, shuffleQuestions, ensureSeed } from "@/lib/quiz/sampler";
 
 const mockQuestions = Array.from({ length: 5 }, (_, index) => ({
-  id: `Q${index}`,
-  type: "single",
+  id: `Q${index}` as const,
+  type: "single" as const,
   prompt: "mock",
   required: true,
   tags: ["test"],

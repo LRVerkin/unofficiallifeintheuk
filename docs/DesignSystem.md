@@ -10,21 +10,22 @@ This lightweight guide captures component usage and accessibility considerations
 
 ## Core Components
 
-- **Button**: variants (`primary`, `secondary`, `ghost`, `link`). Always include visible focus outline (`focus-outline` class). Use `aria-live` sparingly for loading states.
-- **Card**: wraps content sections with `shadow-card` and `rounded-3xl`. Use semantic headings inside.
-- **Input/Field**: pair `label` + `id`, include helper/error text and `aria-invalid` when needed.
-- **Checkbox/Radio**: ensure labels are clickable; group radios within `fieldset` + `legend` for question prompts.
-- **ProgressBar**: use `role="progressbar"` with `aria-valuenow`, `aria-valuemin`, `aria-valuemax`.
-- **Tooltip**: rely on Radix primitives; ensure keyboard trigger works and `aria-describedby` links to content.
+- **Button**: variants (`primary`, `secondary`, `ghost`, `link`) + sizes (`sm`, `md`, `lg`). Use `asChild` when wrapping Next `Link`; built-in focus styles cover accessibility.
+- **Card**: rounded container with subtle border/shadow; wrap hero, feature, or settings blocks.
+- **Input**: general text input. Pair with `<label>`; apply `aria-invalid` on errors.
+- **Checkbox / RadioGroup**: Radix-backed controls; keep labels clickable and group radios with legends for quiz prompts.
+- **Progress**: `role="progressbar"` + `aria-valuenow` for announcing quiz progress.
+- **Tooltip**: Radix provider; triggers must be focusable and reference content via `aria-describedby`.
+- **Alert**: use for success/warning/error messaging; keep copy concise.
+- **ShareButtons**: copy/Web Share pair triggering analytics events; summary text should be short.
 
 ## Layout Components
 
 - **SiteHeader**: includes skip link anchor, navigation, Ko-fi CTA. Keep it sticky with backdrop blur; update links as new sections exist.
 - **SiteFooter**: always display parody disclaimer plus Ko-fi/feedback links.
 
-## CTA Helpers
-
 - **KoFiLink**: two variants (`link`, `button`). Always set `rel="noreferrer"` for external links and read `NEXT_PUBLIC_KO_FI_URL` at runtime.
+- **ShareButtons**: uses clipboard + Web Share API; call from results or marketing sections when share copy available.
 
 ## Accessibility Checklist
 
