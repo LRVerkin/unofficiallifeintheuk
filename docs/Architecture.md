@@ -5,6 +5,7 @@ Comprehensive blueprint for implementing the MVP web experience described in the
 ---
 
 ## 1. Objectives & Constraints
+
 - Deliver a mobile-first, humour-driven quiz that loads fast (<1s on 4G) and meets WCAG AA.
 - Keep the MVP serverless and stateless: no user accounts, minimal persistence, no PII collection.
 - Support multiple question types (single, multiple, rank, text) and special scoring rules.
@@ -15,6 +16,7 @@ Comprehensive blueprint for implementing the MVP web experience described in the
 ---
 
 ## 2. System Overview
+
 - **Presentation**: Next.js 15 (App Router) + React 18, pre-rendered marketing pages with client-side quiz experience.
 - **Data**: Static question bank (TypeScript module generated from `QuestionBank.md`) plus persona metadata (`data/personas.ts`) and Ko-fi/feedback configuration. Quiz session state lives in browser memory with optional `sessionStorage` for reload resilience.
 - **Business Logic**: Client-side quiz engine handles sampling, validation, scoring (including text normalisation), persona mapping, and result aggregation. Feedback form calls a server action/API route that forwards submissions.
@@ -24,6 +26,7 @@ Comprehensive blueprint for implementing the MVP web experience described in the
 ---
 
 ## 3. Technology Stack Decisions
+
 - All primary tooling/services must be free/open-source or operate on a free tier for the MVP (e.g., pnpm, Next.js, Tailwind, Plausible’s free analytics plan); any future paid upgrade requires explicit approval.
 - **Language**: TypeScript everywhere for type safety and clear domain contracts.
 - **Framework**: Next.js 15 App Router for hybrid SSG/SSR, route conventions, React 18+ features, and incremental adoption of the latest stable APIs.
@@ -36,12 +39,13 @@ Comprehensive blueprint for implementing the MVP web experience described in the
   - Integration: Component tests with Playwright Component Testing (optional) or RTL.
   - E2E: Playwright (runs against Next dev server / preview build).
 - **Tooling**: pnpm as package manager; ESLint (Next config + custom rules), Prettier, Commitlint (optional).
-- **Component Workbench**: Storybook is deferred until Step 4 when the shared UI system lands; evaluate then (it remains optional and fits within the all-free-tooling constraint).
+- **Component Workbench**: Storybook intentionally deferred for MVP; preview components via local Next routes and reevaluate once the component library grows (post-Step 5).
 - **CI/CD**: GitHub Actions (lint, typecheck, unit, component, e2e on preview build) + Vercel preview deployments.
 
 ---
 
 ## 4. Project Structure
+
 ```
 .
 ├── app/
@@ -129,11 +133,11 @@ export type MultipleChoiceQuestion = BaseQuestion<"multiple", number[]>;
 export type RankQuestion = BaseQuestion<"rank", number[]>;
 export interface TextQuestion extends BaseQuestion<"text", string[]> {
   textConfig?: {
-    ignoreCase?: boolean;          // default true
-    trimWhitespace?: boolean;      // default true
-    collapseWhitespace?: boolean;  // default true
-    stripPunctuation?: boolean;    // default true
-    fuzzyThreshold?: number;       // optional Levenshtein ratio 0-1
+    ignoreCase?: boolean; // default true
+    trimWhitespace?: boolean; // default true
+    collapseWhitespace?: boolean; // default true
+    stripPunctuation?: boolean; // default true
+    fuzzyThreshold?: number; // optional Levenshtein ratio 0-1
   };
 }
 
@@ -152,8 +156,8 @@ export interface Persona {
   id: string;
   name: string;
   description: string;
-  minPercentage: number;           // inclusive boundary
-  imageSrc: string;                // Next Image static asset
+  minPercentage: number; // inclusive boundary
+  imageSrc: string; // Next Image static asset
 }
 
 export interface FeedbackSubmission {
@@ -168,12 +172,13 @@ export interface FeedbackSubmission {
 ```
 
 **Session state**
+
 ```ts
 // lib/quiz/session.ts
 export interface QuizConfig {
-  questionCount: number;     // e.g., 24 in MVP
-  passThreshold: number;     // e.g., 0.75
-  seed?: string;             // deterministic seed persisted per session
+  questionCount: number; // e.g., 24 in MVP
+  passThreshold: number; // e.g., 0.75
+  seed?: string; // deterministic seed persisted per session
 }
 
 export interface Answer {
@@ -183,10 +188,10 @@ export interface Answer {
 }
 
 export interface QuizSession {
-  id: string;                           // uuid
+  id: string; // uuid
   status: "not-started" | "in-progress" | "completed";
   config: QuizConfig;
-  seed: string;                         // required once session starts for reproducibility
+  seed: string; // required once session starts for reproducibility
   questions: Question[];
   answers: Record<QuestionId, Answer>;
   startedAt?: number;
@@ -200,7 +205,7 @@ export interface QuizResult {
   percentage: number;
   passed: boolean;
   persona: Persona;
-  diplomaAsset: string;             // static asset path used in celebration card
+  diplomaAsset: string; // static asset path used in celebration card
   shareCard: {
     headline: string;
     description: string;
@@ -217,6 +222,7 @@ export interface QuizResult {
 ---
 
 ## 6. Data Pipeline
+
 - Source of truth remains `QuestionBank.md`.
 - Implement a dev-time script (`scripts/generate-question-bank.ts`) that parses Markdown and outputs `data/questions.ts` typed module. Script runs on `pnpm build` and `pnpm prepare`.
 - Validate generated data against Zod schemas; fail build if discrepancies.
@@ -226,6 +232,7 @@ export interface QuizResult {
 ---
 
 ## 7. Quiz Engine Behaviour
+
 1. **Sampling**: `sampler.ts` shuffles the full bank with Fisher-Yates and slices to `quizConfig.questionCount`, seeded using the session’s stored seed so the same seed yields identical sets. Launch data contains 24 total questions, so every session currently yields the same set; keeping the sampling infrastructure ensures future question-bank expansions work without code changes. Ensure rank/multiple questions still included evenly by weighting tags if required later.
 2. **Answer capture**: Each renderer emits canonical `Answer` objects. Controlled inputs provide validation feedback (e.g., multi-select requires at least one option).
 3. **Progression**: `useQuizSession` reducer tracks current index, visited questions, and enforces required answers before allowing submission; persists `answers` + last visited question to `sessionStorage`.
@@ -242,6 +249,7 @@ export interface QuizResult {
 ---
 
 ## 8. Page & Component Architecture
+
 - **`/` (Home)**: Static page, `generateMetadata()` for SEO/social; hero CTA button links to `/quiz`. Footer includes `KoFiLink` component and subtle link to `/feedback`.
 - **`/quiz`**:
   - `QuizShell`: wraps header/footer, orchestrates session.
@@ -263,6 +271,7 @@ export interface QuizResult {
 ---
 
 ## 9. Styling & Theming
+
 - Tailwind configured with custom colour palette (Union Jack accents), spacing scale tuned for mobile-first layout.
 - Use logical properties (e.g., `margin-inline`) and clamp-based typography for responsiveness.
 - Animations limited to CSS transitions with `prefers-reduced-motion` fallbacks.
@@ -272,6 +281,7 @@ export interface QuizResult {
 ---
 
 ## 10. Accessibility & Performance
+
 - Semantic HTML: headings, lists, ARIA attributes on interactive controls (especially drag-and-drop ranking).
 - Keyboard-first design: `tabIndex` order, focus outlines, skip-to-content link in layout.
 - Ensure question components expose accessible names (e.g., use `<fieldset>` + `<legend>` for options).
@@ -282,6 +292,7 @@ export interface QuizResult {
 ---
 
 ## 11. Analytics, Telemetry & SEO
+
 - Integrate Plausible via script in `<head>` with manual events (`plausible('quiz_start')`, `plausible('feedback_submit')`, `plausible('ko_fi_click')`, `plausible('question_exit', { questionId })`, etc.).
 - SEO metadata in `lib/seo.ts`; dynamic Open Graph images using Vercel OG (optional) seeded with persona/diploma artwork for richer shares.
 - Sitemap and robots generated via Next route handlers (`app/sitemap.ts`).
@@ -290,6 +301,7 @@ export interface QuizResult {
 ---
 
 ## 12. Configuration & Environment
+
 - `.env.local` for runtime configuration (analytics domain, share secret if using tokenised links, `RESEND_API_KEY`, `FEEDBACK_TO_EMAIL`, `KO_FI_URL` override).
 - `next.config.js` to enable `eslint` on build, image domains if we host assets externally.
 - Add `app/config.ts` exporting constants: `QUIZ_CONFIG`, `PASS_THRESHOLD`, `ALLOW_RETRO_NAVIGATION`, `KO_FI_URL`, persona asset map, etc. Provide centralised tuning point.
@@ -297,6 +309,7 @@ export interface QuizResult {
 ---
 
 ## 13. Testing & TDD Strategy
+
 - **Philosophy**: Write failing tests first at the smallest useful scope, implement to pass, refactor while keeping tests green.
 - **Unit tests** (`tests/unit`):
   - `sampler.spec.ts`: deterministic question sampling, ensures no duplicates.
@@ -327,6 +340,7 @@ export interface QuizResult {
 ---
 
 ## 14. Local Development Workflow
+
 1. `pnpm install`
 2. `pnpm generate:questions` (parses markdown -> typed data; runs automatically on dev/start).
 3. `pnpm dev` launches Next dev server + Playwright component viewer (optional separate command).
@@ -337,6 +351,7 @@ export interface QuizResult {
 ---
 
 ## 15. CI/CD Pipeline
+
 - GitHub Actions workflows:
   - `ci.yml`: triggered on PR/push.
     - Install (pnpm cache).
@@ -350,6 +365,7 @@ export interface QuizResult {
 ---
 
 ## 16. Observability & Logging
+
 - Client-side logging via lightweight wrapper (`lib/logger.ts`) that no-ops in production except for warnings/errors (sends to `console` in dev).
 - Track custom analytics events for funnel metrics (start, finish, share).
 - Optionally send anonymised result data to edge function later (not MVP).
@@ -359,6 +375,7 @@ export interface QuizResult {
 ---
 
 ## 17. Security & Privacy Considerations
+
 - No storage of personal data; results only in browser session.
 - CSP headers via Next middleware: script-src includes Plausible, self.
 - Validate all query parameters on `/results` to prevent XSS; never render untrusted strings without escaping.
@@ -368,6 +385,7 @@ export interface QuizResult {
 ---
 
 ## 18. Future Enhancements (Post-MVP Hooks)
+
 - Serverless endpoint to persist anonymised stats (score distribution) for admin dashboard.
 - Question authoring CMS (e.g., Sanity) replacing static markdown.
 - Localisation and additional quiz banks.
@@ -376,6 +394,7 @@ export interface QuizResult {
 ---
 
 ## 19. Open Questions
+
 - Do we need deterministic seeding for share links (so viewers can replay the exact quiz)? Default is no; can add later.
 - Should ranking questions expose keyboard controls via buttons or roving tabindex? Proposed solution uses DnD kit with `@dnd-kit/accessibility`, but confirm UX.
 - Confirm analytics domain (plausible.io vs self-host) before deployment.

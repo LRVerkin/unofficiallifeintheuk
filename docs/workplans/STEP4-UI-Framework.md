@@ -3,9 +3,11 @@
 **Task ID**: STEP-4-UIFramework
 
 ## Problem Statement
+
 The app needs shared layout primitives, typography, form controls, and accessibility scaffolding before feature routes can be built. Without a cohesive design system, later quiz and results experiences will be inconsistent and harder to maintain.
 
 ## Proposed Implementation
+
 - Configure global styles (`app/globals.css`) using Tailwind layers, CSS custom properties, typography scale, and reduced-motion support per Architecture guidelines.
 - Implement `app/layout.tsx` handling fonts, metadata defaults, Plausible placeholder script, skip link, header/footer shells, and root providers.
 - Build reusable UI primitives in `components/ui` (Button, Card, Input, Checkbox, RadioGroup, Progress, Tooltip, Alert) leveraging Tailwind + Radix UI for accessibility.
@@ -15,6 +17,7 @@ The app needs shared layout primitives, typography, form controls, and accessibi
 - Optionally stand up Storybook or lightweight preview route to visually verify components across breakpoints.
 
 ## Components Involved
+
 - Global styles (`app/globals.css`, `tailwind.config.ts`)
 - `app/layout.tsx`
 - `components/ui/*` primitives
@@ -23,9 +26,11 @@ The app needs shared layout primitives, typography, form controls, and accessibi
 - Documentation under `docs/`
 
 ## Dependencies
+
 - Step 1 tooling + Tailwind configuration.
 
 ## Implementation Checklist
+
 - [ ] Finalise Tailwind config tokens (colors, spacing, typography scale, motion preferences) referenced by design system.
 - [ ] Update `app/globals.css` with Tailwind base/components/utilities layers plus custom properties and accessibility resets.
 - [ ] Implement `app/layout.tsx` with Next fonts, metadata defaults, skip-to-content link, header/footer slots, and Plausible script placeholder.
@@ -34,29 +39,36 @@ The app needs shared layout primitives, typography, form controls, and accessibi
 - [ ] Implement UI primitives: Button variants, Card, Input, Checkbox, RadioGroup, ProgressBar, Tooltip, Alert; include story/demo or MDX docs.
 - [ ] Create CTA helpers (KoFiLink, ShareButtons) with prop-driven analytics event triggers.
 - [ ] Add unit/visual regression tests where practical (e.g., Storybook stories with Chromatic optional later).
-- [ ] Document component guidelines (usage, accessibility notes) in `docs/DesignSystem.md` or append to Architecture doc.
+- [ ] Document component guidelines (usage, accessibility notes) in `docs/DesignSystem.md` (create dedicated file now for easier future edits).
 
 ## Verification Steps
+
 - `pnpm lint`
 - `pnpm typecheck`
-- Optional: run Storybook or component preview script once configured (`pnpm dev` component route) to visually inspect components.
+- Default preview approach: use local Next routes or test pages (`pnpm dev`); Storybook intentionally deferred for now.
 
 ## Decision Authority
+
 - Independent: choice of Radix vs headless UI, exact Tailwind token names, whether to add Storybook now or later, header/footer layout specifics consistent with Architecture.
 - Requires user input: large scope reductions (e.g., omitting entire component families), major visual departures from Architecture doc.
 
 ## Questions / Uncertainties
+
 - **Blocking**: None known.
 - **Non-blocking**:
   - Should Storybook be introduced now or deferred? (Default to deferring unless needed.)
   - Any brand assets (logo, icons) available yet? (Use placeholders until provided.)
 
 ## Acceptable Tradeoffs
+
 - Placeholder copy/assets acceptable while waiting on final branding.
 - Tooltip/alert implementations can rely on Radix primitives to save time instead of bespoke solutions.
+- Storybook is intentionally deferred; preview components via local Next routes for now and only introduce Storybook later if the component library outgrows simple test pages.
 
 ## Status
+
 - Not Started
 
 ## Notes
+
 - Capture any accessibility decisions (focus outlines, keyboard handling) for reference when building quiz UI.
