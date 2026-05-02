@@ -1,0 +1,74 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import KoFiLink from "@/components/astro/KoFiLink.astro";
+
+const FEATURES = [
+  {
+    title: "24 spicy questions",
+    body: "Single choice, multiple choice, drag-to-rank, and short text answers that actually reflect life in the UK.",
+  },
+  {
+    title: "Instant personas",
+    body: "Results unlock a bespoke British persona, witty diploma, and tasteful share card.",
+  },
+  {
+    title: "Accessible & fast",
+    body: "Built mobile-first with WCAG AA color contrast, keyboard support, and <1s loads.",
+  },
+];
+---
+
+<BaseLayout>
+  <div class="flex flex-col gap-16">
+    <section
+      class="rounded-3xl border border-[var(--color-border)] bg-white px-6 py-10 shadow-[var(--shadow-card)]"
+    >
+      <p class="text-sm uppercase tracking-[0.25rem] text-[var(--color-brand-secondary)]">
+        Unofficial Life in the UK
+      </p>
+      <h1
+        class="mt-4 max-w-3xl font-[var(--font-display)] text-4xl font-semibold leading-snug sm:text-5xl"
+      >
+        The only Life in the UK test that asks important things like the correct way to
+        queue.
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg text-[var(--color-muted-foreground)]">
+        Take 24 satirical-yet-accurate questions, hit submit, and unlock a bespoke British
+        persona with shareable diploma. No logins, no data capture, just vibes.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a
+          href="/quiz"
+          class="rounded-full bg-[var(--color-brand-primary)] px-6 py-3 text-base font-semibold text-white shadow-[var(--shadow-card)] transition hover:bg-[var(--color-brand-secondary)]"
+        >
+          Take the Test
+        </a>
+        <KoFiLink variant="button" />
+      </div>
+    </section>
+
+    <section class="grid gap-6 md:grid-cols-3" aria-label="Quiz highlights">
+      {
+        FEATURES.map((feature) => (
+          <article class="rounded-2xl border border-[var(--color-border)] bg-white/70 p-5 backdrop-blur">
+            <h3 class="font-[var(--font-display)] text-xl">{feature.title}</h3>
+            <p class="mt-2 text-sm text-[var(--color-muted-foreground)]">
+              {feature.body}
+            </p>
+          </article>
+        ))
+      }
+    </section>
+
+    <section
+      class="rounded-3xl border border-dashed border-[var(--color-brand-secondary)]/40 p-6"
+    >
+      <h2 class="font-[var(--font-display)] text-2xl">Results in one tap</h2>
+      <p class="mt-3 text-base text-[var(--color-muted-foreground)]">
+        Every quiz session calculates pass/fail, highlights misunderstood questions, and
+        reveals a persona like &ldquo;Tea Sommelier&rdquo; or &ldquo;Tube Oracle.&rdquo;
+        The <code>/results</code> route will show breakdowns, share cards, and download options.
+      </p>
+    </section>
+  </div>
+</BaseLayout>

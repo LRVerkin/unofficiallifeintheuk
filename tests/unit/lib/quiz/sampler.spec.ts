@@ -1,13 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { pickQuestions, shuffleQuestions, ensureSeed } from "@/lib/quiz/sampler";
+import type { QuizQuestion } from "@/lib/quiz/types";
 
-const mockQuestions = Array.from({ length: 5 }, (_, index) => ({
-  id: `Q${index}`,
-  type: "single",
+const mockQuestions: QuizQuestion[] = Array.from({ length: 5 }, (_, index) => ({
+  id: `Q${String(index + 1).padStart(3, "0")}`,
+  type: "single" as const,
   prompt: "mock",
   required: true,
   tags: ["test"],
   specialRules: [],
+  credits: [],
   options: [
     { id: 1, label: "One" },
     { id: 2, label: "Two" },

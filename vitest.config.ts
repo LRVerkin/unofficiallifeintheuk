@@ -1,14 +1,14 @@
 import { defineConfig } from "vitest/config";
 import path from "node:path";
 import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [tsconfigPaths(), react()],
+  plugins: [react()],
   test: {
     globals: true,
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
+    include: ["tests/**/*.{test,spec}.{ts,tsx}"],
     coverage: {
       reporter: ["text", "lcov"],
       reportsDirectory: "./coverage/unit",
@@ -16,7 +16,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "."),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
 });

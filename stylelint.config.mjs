@@ -6,9 +6,10 @@ const config = {
     "at-rule-no-unknown": [
       true,
       {
-        ignoreAtRules: ["tailwind"],
+        ignoreAtRules: ["tailwind", "theme", "apply", "variants", "screen"],
       },
     ],
+    "import-notation": null,
     "value-keyword-case": null,
     "order/order": [
       "custom-properties",

@@ -1,6 +1,14 @@
 # Question Bank
 
-All questions sourced from the pitch and structured per the PRD so the quiz app can ingest them directly.
+Human-readable reference for the launch question set. The runtime source of truth is [`src/data/questions.ts`](../src/data/questions.ts) — keep this file in sync manually when content changes; it is no longer parsed at build time.
+
+`special_rules` here is documentation. The runtime equivalent is the typed `specialRules` discriminated union (`must_include`, `fail_on_hint`, `auto_pass`, `note`) defined in [`src/data/question-schema.ts`](../src/data/question-schema.ts).
+
+`credits` carries contributor names (e.g. for Q012); the runtime field is `credits: string[]`.
+
+## Credits
+
+Special thanks to **Jess** and **Simona** for contributing Q012 (landlord specials).
 
 ## Q001
 
@@ -191,7 +199,8 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
   3: Incorrect, but if that's your experience of landlords, I envy you.
 - required: true
 - tags: [housing, humour]
-- special_rules: (contributed by Jess & Simona)
+- credits: [Jess, Simona]
+- special_rules: none
 
 ## Q013
 
@@ -240,7 +249,7 @@ All questions sourced from the pitch and structured per the PRD so the quiz app 
   1: A normal power outlet? In a bathroom? You don't live in the UK.
   correct: Correct! There are no regular power outlets in bathrooms.
 - required: true
-- tags: [politics, humour]
+- tags: [housing, safety]
 - special_rules: none
 
 ## Q016

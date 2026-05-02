@@ -4,12 +4,13 @@ import type { QuizQuestion } from "@/lib/quiz/types";
 
 const questions: QuizQuestion[] = [
   {
-    id: "Q1",
+    id: "Q001",
     type: "single",
     prompt: "Pick one",
     required: true,
     tags: ["test"],
     specialRules: [],
+    credits: [],
     options: [
       { id: 1, label: "One" },
       { id: 2, label: "Two" },
@@ -30,12 +31,12 @@ describe("session helpers", () => {
   it("records answers and advances when valid", () => {
     const session = startSession(createSession(questions, { questionCount: 1, passThreshold: 0.5 }));
     const answered = answerQuestion(session, {
-      questionId: "Q1",
+      questionId: "Q001",
       type: "single",
       value: 1,
       status: "answered",
     });
-    expect(answered.answers.Q1.value).toBe(1);
+    expect(answered.answers.Q001.value).toBe(1);
     const advanced = goToNextQuestion(answered);
     expect(advanced.currentIndex).toBe(0); // only one question
   });
@@ -43,7 +44,7 @@ describe("session helpers", () => {
   it("completes a session and stores the result", () => {
     let session = startSession(createSession(questions, { questionCount: 1, passThreshold: 0.5 }));
     session = answerQuestion(session, {
-      questionId: "Q1",
+      questionId: "Q001",
       type: "single",
       value: 1,
       status: "answered",
