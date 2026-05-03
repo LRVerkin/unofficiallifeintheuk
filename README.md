@@ -1,12 +1,12 @@
 # Unofficial Life in the UK
 
 **Could you become a UK citizen?**
-Take the [ACTUAL Life in the UK](https://lifeintheuktestweb.co.uk/) test and find out!
+Take [ACTUAL Life in the UK](https://lifeintheuktestweb.co.uk/) test and find out!
 
-_Life in the UK_ is an official test you must pass to gain British citizenship.
-It's famous for having nothing to do with real life in the UK — most of your British friends couldn’t pass it without studying.
+_Life in the UK_ is an official test you must pass to gain British citizenship.  
+It's famous for having nothing to do with real life in the UK — most of your British friends couldn’t pass it.
 
-Our **ACTUAL Life in the UK** test has no 1988 Olympics, no Tower of London construction: only REAL classics from the REAL United Kingdom!
+Our **ACTUAL Life in the UK** test has no 1988 Olympics winner, no Tower of London construction year, no who invented the TV: only REAL classics from the REAL United Kingdom!
 
 ## Stack
 
