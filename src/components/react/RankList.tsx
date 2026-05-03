@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { Option } from "./RadioGroup";
 
 interface RankListProps {
@@ -18,8 +18,8 @@ function moveItem(value: number[], index: number, delta: 1 | -1): number[] {
 
 export function RankList({ legend, items, value, onChange }: RankListProps) {
   const [announcement, setAnnouncement] = useState("");
-  // Stable focus target so re-renders don't blur the user's button.
-  const lastFocusedKey = useRef<string | null>(null);
+  const [pendingFocus, setPendingFocus] = useState<string | null>(null);
+  const listRef = useRef<HTMLOListElement>(null);
 
   const orderedItems = useMemo(() => {
     const lookup = new Map(items.map((item) => [item.id, item] as const));
@@ -28,25 +28,46 @@ export function RankList({ legend, items, value, onChange }: RankListProps) {
       const item = lookup.get(id);
       if (item) ordered.push(item);
     }
-    // Append any items that weren't in `value` (defensive — keeps the list rendered
-    // even if `value` is shorter than `items`).
+    // Defensive: keep the list rendered if `value` is shorter than `items`.
     for (const item of items) {
       if (!value.includes(item.id)) ordered.push(item);
     }
     return ordered;
   }, [items, value]);
 
-  function move(index: number, delta: 1 | -1, label: string) {
+  // Focus the moved item's matching button after each reorder. If that button
+  // is now disabled (we hit a boundary), fall back to the opposite-direction
+  // button on the same row so keyboard focus stays on the moved item.
+  useLayoutEffect(() => {
+    if (!pendingFocus || !listRef.current) return;
+    const root = listRef.current;
+    const primary = root.querySelector<HTMLButtonElement>(
+      `button[data-key="${pendingFocus}"]`,
+    );
+    let target = primary && !primary.disabled ? primary : null;
+    if (!target) {
+      const [direction, ...idParts] = pendingFocus.split("-");
+      const id = idParts.join("-");
+      const opposite = direction === "up" ? "down" : "up";
+      target = root.querySelector<HTMLButtonElement>(
+        `button[data-key="${opposite}-${id}"]`,
+      );
+    }
+    target?.focus();
+    setPendingFocus(null);
+  }, [pendingFocus]);
+
+  function move(index: number, delta: 1 | -1, item: Option) {
     const next = moveItem(value, index, delta);
     if (next === value) return;
     onChange(next);
-    setAnnouncement(`Moved ${label} to position ${index + delta + 1} of ${value.length}.`);
+    setAnnouncement(`Moved ${item.label} to position ${index + delta + 1} of ${value.length}.`);
   }
 
   return (
     <fieldset className="border-0 p-0">
       <legend className="mb-3 font-display text-lg font-semibold">{legend}</legend>
-      <ol className="flex flex-col gap-2" aria-label={legend}>
+      <ol ref={listRef} className="flex flex-col gap-2" aria-label={legend}>
         {orderedItems.map((item, index) => {
           const upKey = `up-${item.id}`;
           const downKey = `down-${item.id}`;
@@ -66,13 +87,12 @@ export function RankList({ legend, items, value, onChange }: RankListProps) {
                 <button
                   type="button"
                   onClick={() => {
-                    lastFocusedKey.current = `up-${value[index - 1] ?? item.id}`;
-                    move(index, -1, item.label);
+                    setPendingFocus(upKey);
+                    move(index, -1, item);
                   }}
                   disabled={index === 0}
                   aria-label={`Move ${item.label} up`}
                   data-key={upKey}
-                  autoFocus={lastFocusedKey.current === upKey}
                   className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-border)] text-base disabled:cursor-not-allowed disabled:opacity-40 hover:bg-surface-muted"
                 >
                   ↑
@@ -80,13 +100,12 @@ export function RankList({ legend, items, value, onChange }: RankListProps) {
                 <button
                   type="button"
                   onClick={() => {
-                    lastFocusedKey.current = `down-${value[index + 1] ?? item.id}`;
-                    move(index, 1, item.label);
+                    setPendingFocus(downKey);
+                    move(index, 1, item);
                   }}
                   disabled={index === orderedItems.length - 1}
                   aria-label={`Move ${item.label} down`}
                   data-key={downKey}
-                  autoFocus={lastFocusedKey.current === downKey}
                   className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-border)] text-base disabled:cursor-not-allowed disabled:opacity-40 hover:bg-surface-muted"
                 >
                   ↓

@@ -24,7 +24,7 @@ This lightweight guide captures component usage and accessibility considerations
 
 ## CTA Helpers
 
-- **KoFiLink**: two variants (`link`, `button`). Always set `rel="noreferrer"` for external links and read `NEXT_PUBLIC_KO_FI_URL` at runtime.
+- **KoFiLink**: two variants (`link`, `button`). Always set `rel="noreferrer"` for external links and read `PUBLIC_KO_FI_URL` at runtime.
 
 ## Accessibility Checklist
 

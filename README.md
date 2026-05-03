@@ -89,12 +89,13 @@ docs/                   # PRD, Architecture, QuestionBank, Roadmap
 
 ## Environment variables
 
-| Name                      | Description                                                |
-| ------------------------- | ---------------------------------------------------------- |
-| `RESEND_API_KEY`          | API key for outbound feedback emails (server-only).        |
-| `FEEDBACK_TO_EMAIL`       | Inbox that receives forwarded feedback messages.           |
-| `PUBLIC_KO_FI_URL`        | Public Ko-fi link used by the donation CTA.                |
-| `PUBLIC_PLAUSIBLE_DOMAIN` | Domain registered with Plausible for the analytics script. |
+| Name                      | Description                                                           |
+| ------------------------- | --------------------------------------------------------------------- |
+| `RESEND_API_KEY`          | API key for outbound feedback emails (server-only).                   |
+| `FEEDBACK_TO_EMAIL`       | Inbox that receives forwarded feedback messages.                      |
+| `FEEDBACK_FROM_EMAIL`     | Sender used by the feedback action; must be a Resend-verified domain. |
+| `PUBLIC_KO_FI_URL`        | Public Ko-fi link used by the donation CTA.                           |
+| `PUBLIC_PLAUSIBLE_DOMAIN` | Domain registered with Plausible for the analytics script.            |
 
 `PUBLIC_*` values are exposed to the browser; everything else is server-only.
 

@@ -80,4 +80,24 @@ describe("<RankList />", () => {
     await userEvent.click(screen.getByRole("button", { name: "Move M&S down" }));
     expect(liveRegion.textContent).toBe("Moved M&S to position 3 of 5.");
   });
+
+  it("keeps keyboard focus on the moved item's matching button after reorder", async () => {
+    render(<Harness initial={[1, 2, 3, 4, 5]} />);
+    await userEvent.click(screen.getByRole("button", { name: "Move M&S down" }));
+    // After the move, M&S sits at position 3 — its down button is still enabled
+    // and should now hold focus so a follow-up press continues moving it.
+    expect(screen.getByRole("button", { name: "Move M&S down" })).toHaveFocus();
+  });
+
+  it("falls back to the opposite-direction button when the moved item hits a boundary", async () => {
+    render(<Harness initial={[1, 2, 3, 4, 5]} />);
+    // Move Tesco (id 4) up twice — second click lands it at index 1, but if we
+    // started one row higher we'd land at the top. Walk it to the top:
+    await userEvent.click(screen.getByRole("button", { name: "Move Waitrose down" }));
+    // Now order is [M&S, Waitrose, Sainsbury's, Tesco, Aldi]; click Waitrose up
+    // back to the top — its "up" button becomes disabled, so focus should fall
+    // back to the still-enabled "down" button on the same row.
+    await userEvent.click(screen.getByRole("button", { name: "Move Waitrose up" }));
+    expect(screen.getByRole("button", { name: "Move Waitrose down" })).toHaveFocus();
+  });
 });

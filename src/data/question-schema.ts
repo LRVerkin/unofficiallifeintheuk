@@ -68,7 +68,6 @@ export const multipleChoiceQuestionSchema = baseQuestionSchema
     type: z.literal("multiple"),
     options: z.array(optionSchema).min(2),
     correct: z.array(z.number().int().min(1)).min(1),
-    minRequired: z.number().int().min(1).optional(),
   })
   .superRefine((question, ctx) => {
     const optionCount = question.options.length;
@@ -80,13 +79,6 @@ export const multipleChoiceQuestionSchema = baseQuestionSchema
           path: ["correct"],
         });
       }
-    }
-    if (question.minRequired && question.minRequired > question.correct.length) {
-      ctx.addIssue({
-        code: "custom",
-        message: `minRequired cannot exceed number of correct answers for ${question.id}`,
-        path: ["minRequired"],
-      });
     }
   });
 

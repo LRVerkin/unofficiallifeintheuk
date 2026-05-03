@@ -25,7 +25,7 @@ Replaced Next.js 16 / React 19 with Astro 5 + React island + Tailwind 4. The mig
 - ✅ Hand-authored `src/data/questions.ts`. Q011 station bug fixed; Q011 options corrected ("1.30pm", "1pm", "1.15pm", "Lord only knows"); Q011 station set to **London Euston**; Q015 tags corrected to `[housing, safety]`; Q012 “contributed by Jess & Simona” moved into a typed `credits` field.
 - ✅ Persona placeholder SVGs in `public/personas/` plus a README describing replacement.
 - ✅ `.env.example` documenting `RESEND_API_KEY`, `FEEDBACK_TO_EMAIL`, `PUBLIC_KO_FI_URL`, `PUBLIC_PLAUSIBLE_DOMAIN`.
-- ✅ Cloudflare adapter scaffolded in `astro.config.mjs` (configured but inert — `output: "static"` produces a `_worker.js` shell with no server routes; the adapter only takes effect once we flip to `output: "hybrid"` in Phase 5).
+- ✅ Cloudflare adapter scaffolded in `astro.config.mjs` (configured but inert — `output: "static"` produces a `_worker.js` shell with no server routes; the adapter only takes effect once Phase 5 flips to `output: "server"`. Astro 5 dropped `"hybrid"` in favour of per-page `prerender` opt-out.).
 - ✅ Docs refreshed: `Architecture.md`, this `Roadmap.md` (replacing `docs/workplans/`), `README.md`.
 
 ### Known small follow-ups (carry into the next session)
@@ -112,7 +112,7 @@ Tests added (4): plausibleSink forwards / no-ops / handles empty payload, sink c
 ## 🟡 Phase 8 — Deploy (config landed; manual steps remain)
 
 - ⬜ Cloudflare Pages connected to GitHub. **Manual** — connect in the dashboard and point at the `main` branch.
-- ⬜ Production env vars set (`RESEND_API_KEY`, `FEEDBACK_TO_EMAIL`, `PUBLIC_KO_FI_URL`, `PUBLIC_PLAUSIBLE_DOMAIN`). **Manual** — add via Pages → Settings → Environment variables.
+- ⬜ Production env vars set (`RESEND_API_KEY`, `FEEDBACK_TO_EMAIL`, `FEEDBACK_FROM_EMAIL`, `PUBLIC_KO_FI_URL`, `PUBLIC_PLAUSIBLE_DOMAIN`). **Manual** — add via Pages → Settings → Environment variables. `FEEDBACK_FROM_EMAIL` must be on a Resend-verified domain.
 - ✅ `wrangler.toml` declares the `SESSION` KV binding so `@astrojs/cloudflare` stops emitting the build warning. The `id` is a placeholder — replace with the real KV namespace id from `wrangler kv namespace create SESSION` before deploy.
 - ✅ `public/_headers` ships a sensible CSP (`script-src 'self' 'unsafe-inline' https://plausible.io`, `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`, etc.) plus `X-Content-Type-Options`, `Referrer-Policy`, and `Permissions-Policy`. Cloudflare Pages applies `_headers` to every response.
 - ⬜ Lighthouse audit on the deployed site (target ≥ 95 perf / a11y / best practices). **Post-deploy.**

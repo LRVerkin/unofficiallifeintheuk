@@ -183,12 +183,13 @@ export interface QuizSession {
 
 `.env.example` documents the variables. `PUBLIC_*` are exposed to the browser; the rest are server-only.
 
-| Variable                  | Surface | Purpose                                |
-| ------------------------- | ------- | -------------------------------------- |
-| `RESEND_API_KEY`          | server  | Outbound feedback email                |
-| `FEEDBACK_TO_EMAIL`       | server  | Inbox that receives forwarded feedback |
-| `PUBLIC_KO_FI_URL`        | client  | Ko-fi destination for donation CTAs    |
-| `PUBLIC_PLAUSIBLE_DOMAIN` | client  | Domain registered with Plausible       |
+| Variable                  | Surface | Purpose                                              |
+| ------------------------- | ------- | ---------------------------------------------------- |
+| `RESEND_API_KEY`          | server  | Outbound feedback email                              |
+| `FEEDBACK_TO_EMAIL`       | server  | Inbox that receives forwarded feedback               |
+| `FEEDBACK_FROM_EMAIL`     | server  | Sender for feedback emails (must be Resend-verified) |
+| `PUBLIC_KO_FI_URL`        | client  | Ko-fi destination for donation CTAs                  |
+| `PUBLIC_PLAUSIBLE_DOMAIN` | client  | Domain registered with Plausible                     |
 
 ---
 
@@ -203,8 +204,8 @@ export interface QuizSession {
 
 ## 11. Deployment
 
-- Cloudflare Pages with `@astrojs/cloudflare` adapter. `output: "static"` until the feedback Action lands; flip to `"server"` thereafter.
-- One GitHub Actions workflow (`.github/workflows/ci.yml`, deferred): install → lint → typecheck → unit tests → build.
+- Cloudflare Pages with `@astrojs/cloudflare` adapter. `output: "server"`; every page sets `export const prerender = true` so HTML output is identical to a static build, with only the feedback Action endpoint server-rendered.
+- One GitHub Actions workflow (`.github/workflows/ci.yml`): install → lint → lint:styles → typecheck → unit tests → build.
 - Security headers configured via Cloudflare Pages settings (CSP, Referrer-Policy, X-Content-Type-Options).
 - No middleware, no edge functions beyond the feedback POST.
 
