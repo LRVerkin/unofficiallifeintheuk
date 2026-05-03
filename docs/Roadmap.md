@@ -66,13 +66,16 @@ A working `<QuizApp />` React island lives on `/quiz`. Marketing pages still shi
 
 Tests added: persistence (5), QuestionCard (6), QuizApp (7) — 18 new specs, **72 tests / 18 files** total.
 
-## ⬜ Phase 4 — Results
+## ✅ Phase 4 — Results (complete)
 
-- ⬜ `ResultsView.tsx` — reads sessionStorage with `client:only="react"`; falls back to `?score=&total=` query.
-- ⬜ `PersonaCard.tsx` — uses `image.light` from `src/data/personas.ts`.
-- ⬜ Breakdown list with per-question feedback from the bank.
-- ⬜ Share + Retake CTAs; share copies a clean URL with score query.
-- ⬜ `share_click` analytics event.
+- ✅ `PersonaCard.tsx` — renders the persona's name, headline, description, and `image.light`; shows percentage + raw "X / Y" score; safe against zero-total inputs.
+- ✅ `ResultBreakdown.tsx` — per-question list with correct/incorrect badges, formats user answers per question type (rank uses chevron-separated path), uses per-option feedback when keyed to the user's pick (works for both "correct, here's why" and "wrong, here's why" messages), falls back to `feedback.overall_correct` / `feedback.correct` / `feedback.incorrect` otherwise.
+- ✅ `ResultsView.tsx` — `client:only="react"` island. Reads sessionStorage; falls back to `?score=&total=` query (sanitised — rejects NaN, non-positive total, out-of-range score). Three-state UI: completed-session view (persona + breakdown), shared view (persona only with a "take it yourself" nudge), empty view (CTA to `/quiz`).
+- ✅ Share button: copies `${origin}/results?score=N&total=M` via `navigator.clipboard.writeText`, falls back to a visible "Copy this link" message if clipboard is unavailable. Fires `share_click` with `{ score, total, source }`.
+- ✅ Retake button: `clearSession()` then `window.location.assign("/quiz")`.
+- ✅ `results.astro` mounts `<ResultsView client:only="react" />`.
+
+Tests added (15): PersonaCard (4), ResultBreakdown (5), ResultsView (6) — **87 tests / 21 files** total.
 
 ## ⬜ Phase 5 — Feedback form
 
