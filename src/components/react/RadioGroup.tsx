@@ -12,6 +12,7 @@ interface RadioGroupProps {
   value: number | null;
   onChange: (id: number) => void;
   describedBy?: string;
+  disabled?: boolean;
 }
 
 export function RadioGroup({
@@ -21,12 +22,10 @@ export function RadioGroup({
   value,
   onChange,
   describedBy,
+  disabled = false,
 }: RadioGroupProps) {
   return (
-    <fieldset
-      className="border-0 p-0"
-      aria-describedby={describedBy}
-    >
+    <fieldset className="border-0 p-0" aria-describedby={describedBy} disabled={disabled}>
       <legend className="mb-3 font-display text-lg font-semibold">{legend}</legend>
       <div className="flex flex-col gap-2">
         {options.map((option) => {
@@ -36,10 +35,12 @@ export function RadioGroup({
             <label
               key={option.id}
               htmlFor={inputId}
-              className={`flex cursor-pointer items-start gap-3 rounded-2xl border px-4 py-3 transition-colors ${
+              className={`flex items-start gap-3 rounded-2xl border px-4 py-3 transition-colors ${
+                disabled ? "cursor-not-allowed" : "cursor-pointer"
+              } ${
                 checked
                   ? "border-brand-primary bg-brand-primary/5"
-                  : "border-[var(--color-border)] hover:bg-surface-muted"
+                  : `border-[var(--color-border)] ${disabled ? "" : "hover:bg-surface-muted"}`
               }`}
             >
               <input
@@ -49,6 +50,7 @@ export function RadioGroup({
                 value={option.id}
                 checked={checked}
                 onChange={() => onChange(option.id)}
+                disabled={disabled}
                 className="mt-1 h-4 w-4 accent-brand-primary"
               />
               <span>{option.label}</span>

@@ -68,11 +68,11 @@ describe("<QuizApp />", () => {
     ).toHaveAttribute("aria-valuenow", "1");
   });
 
-  it("disables Next until the current required question is answered", async () => {
+  it("disables Submit until the current required question is answered", async () => {
     render(<QuizApp />);
     await screen.findByText(/Question 1 of/);
-    const next = screen.getByRole("button", { name: /Next/ });
-    expect(next).toBeDisabled();
+    const submit = screen.getByRole("button", { name: /Submit answer/ });
+    expect(submit).toBeDisabled();
   });
 
   it("emits a quiz_start event the first time the user lands in_progress", async () => {
@@ -111,15 +111,16 @@ describe("<QuizApp />", () => {
     expect(await screen.findByText(/Question 6 of 24/)).toBeInTheDocument();
   });
 
-  it("Restart wipes storage and returns to question 1", async () => {
-    saveSession(makeAnsweredSession());
+  it("reveals feedback after Submit and reveals the Next button", async () => {
+    const singleIdx = bank.findIndex((q) => q.id === "Q005");
+    saveSession({ ...makeAnsweredSession(), currentIndex: singleIdx });
     render(<QuizApp />);
-    await screen.findByText(/Question 6 of 24/);
-    await userEvent.click(screen.getByRole("button", { name: /Restart/ }));
-    expect(await screen.findByText(/Question 1 of 24/)).toBeInTheDocument();
-    // Storage was cleared, then immediately re-saved with a fresh session.
-    const stored = loadSession();
-    expect(stored?.currentIndex).toBe(0);
+    await screen.findByText(`Question ${singleIdx + 1} of 24`);
+    // Pick the correct answer for Q005 (option 4 — "Ballsdeep").
+    await userEvent.click(screen.getByLabelText("Ballsdeep"));
+    await userEvent.click(screen.getByRole("button", { name: /Submit answer/ }));
+    expect(await screen.findByText(/Correct!/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Next/ })).toBeInTheDocument();
   });
 
   it("records a hint click on the current question's response", async () => {

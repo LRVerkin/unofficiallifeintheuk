@@ -97,7 +97,7 @@ describe("<ResultBreakdown />", () => {
     expect(screen.getByText(/Tesco › Waitrose › M&S/)).toBeInTheDocument();
   });
 
-  it("uses per-option feedback for an incorrect single-choice pick when available", () => {
+  it("shows only the correct-answer comment for an incorrect single-choice pick", () => {
     const session = makeSession({
       Q001: {
         questionId: "Q001",
@@ -113,7 +113,8 @@ describe("<ResultBreakdown />", () => {
       },
     });
     render(<ResultBreakdown session={session} />);
-    expect(screen.getByText("limpdick is not a dessert.")).toBeInTheDocument();
+    expect(screen.queryByText("limpdick is not a dessert.")).not.toBeInTheDocument();
+    expect(screen.getByText("Correct! Spotted dick.")).toBeInTheDocument();
   });
 
   it("falls back to the bank's general feedback.correct when per-option is missing", () => {

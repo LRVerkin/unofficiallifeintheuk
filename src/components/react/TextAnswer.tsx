@@ -10,6 +10,7 @@ interface TextAnswerProps {
   maxLength?: number;
   autoFocus?: boolean;
   placeholder?: string;
+  disabled?: boolean;
 }
 
 export function TextAnswer({
@@ -22,6 +23,7 @@ export function TextAnswer({
   maxLength,
   autoFocus,
   placeholder,
+  disabled = false,
 }: TextAnswerProps) {
   const hintId = hint ? `${name}-hint` : undefined;
   const errorId = error ? `${name}-error` : undefined;
@@ -46,6 +48,7 @@ export function TextAnswer({
         maxLength={maxLength}
         autoFocus={autoFocus}
         placeholder={placeholder}
+        disabled={disabled}
         aria-invalid={Boolean(error) || undefined}
         aria-describedby={describedBy}
         className={`rounded-2xl border bg-white px-4 py-3 text-base outline-none transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary ${
