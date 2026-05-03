@@ -4,7 +4,7 @@
 
 ### 1) Summary
 
-A tongue-in-cheek, responsive website where visitors take a short quiz about “real” UK life and receive an instant score with witty feedback. The experience is lightweight, fast, and mobile-first.
+A responsive website where visitors take a short quiz about real UK life and receive an instant score with feedback. The experience is lightweight, fast, and mobile-first. The site itself does not flag the quiz as a parody — visitors discover the angle through the questions themselves.
 
 **Pitch**:
 Life in the UK is an official test you must pass to gain British citizenship. It's famous for having nothing to do with real life in the UK, to the point most of your British friends couldn't pass without studying.
@@ -32,7 +32,7 @@ No localisation beyond UK English.
 
 ### 3) Scope (MVP Features)
 
-**Home page**: brief intro, one primary CTA: Big button on a Union Jack flag: TAKE THE TEST, brief disclaimer that it’s a parody of the official “Life in the UK” test. Footer carries subtle links to Ko-fi support and “Suggest a question / give feedback”.
+**Home page**: short intro framing the site as the "ACTUAL Life in the UK" test against the official one, one primary CTA — big button on a Union Jack flag: TAKE THE TEST. Footer carries subtle links to Ko-fi support and "Suggest a question / give feedback".
 
 **Quiz flow**: 24 questions per run, randomly sampled and shuffled per session from the bank of questions. (For launch we only have 24 authored questions, so every run currently uses the full set; the sampling mechanics stay in place so adding more questions later requires no product or code changes.)
 

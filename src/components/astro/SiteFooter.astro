@@ -2,27 +2,27 @@
 const koFiUrl = import.meta.env.PUBLIC_KO_FI_URL ?? "https://ko-fi.com/";
 ---
 
-<footer class="border-t border-[var(--color-border)] bg-[var(--color-surface)] text-sm">
+<footer
+  class="mt-16 border-t-4 border-[var(--color-brand-primary)] bg-[var(--color-surface-muted)] text-sm"
+>
   <div
-    class="mx-auto flex max-w-5xl flex-col gap-3 px-4 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8"
+    class="mx-auto flex max-w-5xl flex-wrap items-center gap-4 px-4 py-6 sm:px-6 lg:px-8"
   >
-    <p class="text-[var(--color-muted-foreground)]">
-      This is an unofficial parody of the Life in the UK test. No lawyers were harmed in
-      the making of these questions.
-    </p>
-    <div class="flex flex-wrap gap-3 text-sm">
-      <a href="/feedback" class="underline-offset-2 hover:underline">
-        Suggest a question
-      </a>
-      <span aria-hidden="true">•</span>
-      <a
-        href={koFiUrl}
-        target="_blank"
-        rel="noreferrer"
-        class="underline-offset-2 hover:underline"
-      >
-        Support on Ko-fi
-      </a>
-    </div>
+    <a
+      href="/feedback"
+      class="font-medium text-[var(--color-brand-primary)] underline-offset-2 hover:underline"
+    >
+      Suggest a question
+    </a>
+    <span aria-hidden="true" class="text-[var(--color-muted-foreground)]">·</span>
+    <a
+      href={koFiUrl}
+      target="_blank"
+      rel="noreferrer"
+      data-ko-fi-link
+      class="font-medium text-[var(--color-brand-primary)] underline-offset-2 hover:underline"
+    >
+      Support us on Ko-fi
+    </a>
   </div>
 </footer>

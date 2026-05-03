@@ -11,11 +11,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    "bg-brand-primary text-white hover:bg-brand-secondary focus-visible:outline-brand-primary",
+    "bg-[var(--color-brand-primary)] text-white shadow-[0_2px_0_var(--color-foreground)] hover:bg-[var(--color-brand-secondary)]",
   secondary:
-    "border border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white focus-visible:outline-brand-primary",
+    "bg-[var(--color-surface)] text-[var(--color-foreground)] border-2 border-[var(--color-foreground)] hover:bg-[var(--color-surface-muted)]",
   ghost:
-    "text-brand-secondary hover:bg-surface-muted focus-visible:outline-brand-secondary",
+    "text-[var(--color-brand-primary)] hover:bg-[var(--color-surface-muted)]",
 };
 
 const sizeClasses: Record<Size, string> = {
@@ -32,7 +32,7 @@ export function Button({
   ...rest
 }: ButtonProps) {
   const base =
-    "inline-flex items-center justify-center rounded-full font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60";
+    "inline-flex items-center justify-center font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-60";
   return (
     <button
       type={type}

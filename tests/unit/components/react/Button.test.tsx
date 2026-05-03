@@ -34,7 +34,7 @@ describe("<Button />", () => {
 
   it("applies the variant class for secondary", () => {
     render(<Button variant="secondary">Go</Button>);
-    expect(screen.getByRole("button").className).toMatch(/border-brand-primary/);
+    expect(screen.getByRole("button").className).toMatch(/border-2/);
   });
 
   it("forwards arbitrary aria attributes", () => {

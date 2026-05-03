@@ -19,8 +19,8 @@ This lightweight guide captures component usage and accessibility considerations
 
 ## Layout Components
 
-- **SiteHeader**: includes skip link anchor, navigation, Ko-fi CTA. Keep it sticky with backdrop blur; update links as new sections exist.
-- **SiteFooter**: always display parody disclaimer plus Ko-fi/feedback links.
+- **SiteHeader**: site title on the left, "Take the test" CTA on the right (hidden on /quiz). Black background with a gov.uk-blue accent strip below.
+- **SiteFooter**: links to "Suggest a question" and "Support us on Ko-fi". No parody disclaimer in the UI.
 
 ## CTA Helpers
 
