@@ -18,9 +18,11 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up pnpm
+        # Version is intentionally NOT set here — `pnpm/action-setup@v4` now
+        # rejects having both an explicit `version:` and `packageManager` in
+        # package.json. Letting it read pnpm@10.21.0 from package.json keeps
+        # CI and local installs on the same version.
         uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       - name: Set up Node
         uses: actions/setup-node@v4
