@@ -36,18 +36,20 @@ Replaced Next.js 16 / React 19 with Astro 5 + React island + Tailwind 4. The mig
 
 ---
 
-## ⬜ Phase 2 — Design system primitives
+## ✅ Phase 2 — Design system primitives (complete)
 
-Small, dependency-free components that the quiz UI will consume.
+Eight dependency-free React primitives in `src/components/react/`, each with a co-located Vitest + RTL spec under `tests/unit/components/react/`. 37 new tests (54 total).
 
-- ⬜ `src/components/react/Button.tsx` — primary, secondary, ghost variants.
-- ⬜ `src/components/react/Card.tsx`.
-- ⬜ `src/components/react/RadioGroup.tsx` — wraps native `<input type="radio">` with `<fieldset>` + `<legend>` for a11y.
-- ⬜ `src/components/react/CheckboxGroup.tsx`.
-- ⬜ `src/components/react/RankList.tsx` — up/down buttons, no `@dnd-kit`.
-- ⬜ `src/components/react/TextAnswer.tsx`.
-- ⬜ `src/components/react/ProgressBar.tsx`.
-- ⬜ `src/components/react/Alert.tsx` — `aria-live="polite"`.
+- ✅ `Button.tsx` — primary / secondary / ghost variants, sm/md sizes.
+- ✅ `Card.tsx` — generic surface wrapper with `as` prop for semantic overrides.
+- ✅ `RadioGroup.tsx` — `<fieldset>` + `<legend>` + native radios, single-select.
+- ✅ `CheckboxGroup.tsx` — same pattern, returns the selection sorted ascending.
+- ✅ `RankList.tsx` — up/down buttons (boundary-disabled), `aria-live` reorder announcements, no DnD dep.
+- ✅ `TextAnswer.tsx` — `<label>`/`htmlFor` linkage, `aria-invalid` + `aria-describedby` for errors.
+- ✅ `ProgressBar.tsx` — `role="progressbar"`, full ARIA value attrs, current clamped to `[0, total]`.
+- ✅ `Alert.tsx` — `role="status"` + `aria-live="polite"` for info; `role="alert"` + `aria-live="assertive"` for success/error.
+
+Also fixed in this phase: `vitest.setup.ts` now imports `@testing-library/jest-dom/vitest` (Vitest matcher type augmentation) and `tsconfig.json` includes the setup file so the augmentation reaches test files.
 
 ## ⬜ Phase 3 — Quiz UI
 

@@ -9,6 +9,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": [".astro/types.d.ts", "src/**/*", "tests/**/*"],
+  "include": [".astro/types.d.ts", "src/**/*", "tests/**/*", "vitest.setup.ts"],
   "exclude": ["node_modules", "dist", ".astro"]
 }
