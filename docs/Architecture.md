@@ -135,7 +135,7 @@ export interface QuizSession {
 
 ## 5. Quiz engine behaviour
 
-1. **Sampling** — `lib/quiz/sampler.ts` uses Fisher–Yates with a `mulberry32(djb2(seed))` PRNG, seeded by `crypto.randomUUID()` per session. Deterministic for the same seed; today the bank holds 24 questions and `questionCount` is 24, so every session sees the full set.
+1. **Sampling** — `lib/quiz/sampler.ts` uses Fisher–Yates with a `mulberry32` PRNG, seeded by hashing the session seed string with a small 32-bit folding hash (`(hash << 5) - hash + charCode`). Session seeds default to `crypto.randomUUID()`. Deterministic for the same seed; today the bank holds 24 questions and `questionCount` is 24, so every session sees the full set.
 2. **Answer capture** — pure reducer in `lib/quiz/session.ts`. Validators in `lib/quiz/validators.ts` deduplicate selections and enforce the `required` flag.
 3. **Scoring** — `lib/quiz/scoring.ts`:
    - `single`: correct if response in `question.correct`.

@@ -165,12 +165,12 @@ Ranking uses up/down buttons for keyboard-first accessibility (drag-and-drop is 
 
 “Must include umbrella” modelled via `specialRules: [{ kind: "must_include", optionIds: [4] }]`.
 
-Train arrival (Q011) uses the `single` type with multiple acceptable values in `correct` — selecting either “1.30pm” or “Lord only knows” counts as correct.
+Train arrival (Q011) is a `single`-type question with two acceptable answers: option 1 (“1.30pm”) and option 4 (“Lord only knows”) both count as correct. Per-option feedback strings explain the joke for each pick. The earlier “acceptRange / optimistic counts” idea has been retired.
 
 Per-choice feedback: render after submission on Results page (not during test), using the bank’s feedback and the general feedbackCorrect/Incorrect.
 
 Persona selection: configurable map of score brackets → persona metadata (name, blurb, asset paths) rendered in diploma card component.
 
-Feedback submissions call a serverless route that validates content, applies spam protection (honeypot + rate limit), and forwards the payload to `feedback@unofficiallifeintheuk.com` via transactional email (e.g., Resend or Postmark). If the user supplies their email, it is inserted into the forwarded message body and discarded immediately afterward; otherwise the message is marked anonymous, so no PII is stored beyond the outbound email.
+Feedback submissions call a serverless route that validates content, applies spam protection (honeypot + rate limit), and forwards the payload to `feedback@unofficiallifeinthe.uk` via transactional email (e.g., Resend or Postmark). If the user supplies their email, it is inserted into the forwarded message body and discarded immediately afterward; otherwise the message is marked anonymous, so no PII is stored beyond the outbound email.
 
 Analytics capture `question_exit` events (last question visited when a session ends early) so content/design can identify weak questions.

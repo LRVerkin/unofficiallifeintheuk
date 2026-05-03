@@ -105,10 +105,11 @@ Special thanks to **Jess** and **Simona** for contributing Q012 (landlord specia
 - type: text
 - prompt: Complete this sentence: “See it, say it…”
 - options: []
-- correct: ["sorted"] //case-insensitive, allow a tiny typo
+- correct: ["sorted"]
 - required: true
 - tags: [transport, language]
-- special_rules: Accepts "sorted" even with one-character typo; case insensitive
+- special_rules: none
+- text_validation: case-insensitive; trims whitespace; fuzzy threshold 0.85 (one-character typos are accepted)
 
 ## Q007
 
