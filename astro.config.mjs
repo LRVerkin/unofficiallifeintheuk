@@ -6,11 +6,17 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   site: "https://unofficiallifeinthe.uk",
-  output: "static",
+  output: "server",
   adapter: cloudflare({
     platformProxy: { enabled: true },
+    sessionKVBindingName: "SESSION",
   }),
-  integrations: [react(), sitemap()],
+  integrations: [
+    react(),
+    sitemap({
+      filter: (page) => !page.endsWith("/404") && !page.endsWith("/404/"),
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },

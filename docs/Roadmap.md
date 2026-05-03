@@ -77,14 +77,17 @@ Tests added: persistence (5), QuestionCard (6), QuizApp (7) — 18 new specs, **
 
 Tests added (15): PersonaCard (4), ResultBreakdown (5), ResultsView (6) — **87 tests / 21 files** total.
 
-## ⬜ Phase 5 — Feedback form
+## ✅ Phase 5 — Feedback form (complete)
 
-- ⬜ `FeedbackForm.tsx` — controlled inputs + honeypot.
-- ⬜ Astro Action `submitFeedback` in `src/actions/index.ts` validating with Zod.
-- ⬜ Resend integration with `RESEND_API_KEY` + `FEEDBACK_TO_EMAIL` (`feedback@unofficiallifeinthe.uk`).
-- ⬜ In-memory rate limit (per-IP token bucket) — upgrade to Cloudflare KV if abuse appears.
-- ⬜ Flip `output: "static"` → `"hybrid"` in `astro.config.mjs` (NOT `"server"` — we want most pages prerendered with only the Action endpoint server-rendered) and mark the static pages with `export const prerender = true` if needed.
-- ⬜ `feedback_submit` analytics event.
+- ✅ `src/lib/feedback/format.ts` — pure helper that builds the email subject/body from `{ message, email? }`. Easily testable; no Resend dependency in the tests.
+- ✅ Astro Action `submitFeedback` in `src/actions/index.ts` — Zod-validated form input (10–2000 char message, optional email, required-empty `hp` honeypot), composes the email via `formatFeedbackEmail`, sends via Resend, throws `ActionError` with a friendly message on misconfiguration or send failure.
+- ✅ `FeedbackForm.tsx` — controlled inputs (re-uses Phase 2 primitives), honeypot, submit-disabled until 10 chars, surfaces server errors with a mailto fallback link, fires `feedback_submit` on success. Accepts a `submitter` prop as a test seam so unit tests don't need the Astro runtime.
+- ✅ `feedback.astro` mounts `<FeedbackForm client:load />` and replaces the placeholder.
+- ✅ Astro `output` flipped to `"server"` (Astro 5 dropped `"hybrid"`); all 5 page files now carry `export const prerender = true`, so HTML output is identical to before — only the action endpoint is server-rendered.
+- ✅ `astro:actions` aliased to a small stub in `vitest.config.ts` so component tests can lazy-import the virtual module without erroring during transform.
+- ⬜ Rate limiter — deliberately deferred. Cloudflare Workers' in-memory state is per-isolate and per-cold-start, so a `Map`-based limiter doesn't actually rate-limit. Track as a Phase 9 follow-up: per-IP token bucket in Cloudflare KV or Upstash.
+
+Tests added (10): `formatFeedbackEmail` (4), FeedbackForm (6) — **97 tests / 23 files** total.
 
 ## ⬜ Phase 6 — Analytics & SEO
 

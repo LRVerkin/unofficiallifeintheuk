@@ -17,6 +17,9 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // Astro virtual modules don't exist outside the Astro build; stub them
+      // for Vitest so component tests can import (or lazy-import) actions.
+      "astro:actions": path.resolve(__dirname, "./tests/stubs/astro-actions.ts"),
     },
   },
 });
