@@ -1,32 +1,23 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { QuizApp } from "@/components/react/QuizApp";
 ---
 
 <BaseLayout title="Take the Quiz · Unofficial Life in the UK">
-  <section
-    class="rounded-3xl border border-[var(--color-border)] bg-white px-6 py-10 shadow-[var(--shadow-card)]"
-  >
-    <h1 class="font-[var(--font-display)] text-3xl font-semibold sm:text-4xl">
-      The quiz arrives in the next round
-    </h1>
-    <p class="mt-4 max-w-2xl text-lg text-[var(--color-muted-foreground)]">
-      The 24-question experience, drag-to-rank inputs, and live progress are planned for
-      the next session. Until then, head back to the homepage or drop a question idea via
-      feedback.
-    </p>
-    <div class="mt-8 flex flex-wrap gap-3">
-      <a
-        href="/"
-        class="rounded-full border border-[var(--color-brand-primary)] px-5 py-2 text-sm font-semibold text-[var(--color-brand-primary)] transition hover:bg-[var(--color-brand-primary)] hover:text-white"
-      >
-        Back to home
-      </a>
-      <a
-        href="/feedback"
-        class="rounded-full bg-[var(--color-brand-secondary)] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[var(--color-brand-primary)]"
-      >
-        Suggest a question
-      </a>
-    </div>
-  </section>
+  <div class="flex flex-col gap-6">
+    <header>
+      <p class="text-sm uppercase tracking-[0.2rem] text-[var(--color-brand-secondary)]">
+        Unofficial Life in the UK
+      </p>
+      <h1 class="mt-2 font-[var(--font-display)] text-3xl font-semibold sm:text-4xl">
+        The Quiz
+      </h1>
+      <p class="mt-2 max-w-2xl text-base text-[var(--color-muted-foreground)]">
+        24 questions, no logins, no data capture. Pick the wrong tea-making method and the
+        Home Office will be in touch.
+      </p>
+    </header>
+
+    <QuizApp client:load />
+  </div>
 </BaseLayout>

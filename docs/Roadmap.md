@@ -51,14 +51,20 @@ Eight dependency-free React primitives in `src/components/react/`, each with a c
 
 Also fixed in this phase: `vitest.setup.ts` now imports `@testing-library/jest-dom/vitest` (Vitest matcher type augmentation) and `tsconfig.json` includes the setup file so the augmentation reaches test files.
 
-## ⬜ Phase 3 — Quiz UI
+## ✅ Phase 3 — Quiz UI (complete)
 
-- ⬜ `QuizApp.tsx` — reducer over `lib/quiz/session.ts`, persists to `sessionStorage`.
-- ⬜ `QuestionCard.tsx` — switches by `question.type`.
-- ⬜ Hint UI for Q007 — clicking the “What is a cuppa?” hint records `hintsUsed: ["cuppa"]` in the response.
-- ⬜ `quiz.astro` mounts `<QuizApp client:load />` and replaces the placeholder.
-- ⬜ Resume mid-quiz on reload.
-- ⬜ Quiz analytics: `quiz_start`, `quiz_complete` events.
+A working `<QuizApp />` React island lives on `/quiz`. Marketing pages still ship 0 KB JS; only `/quiz` hydrates.
+
+- ✅ `src/lib/quiz/persistence.ts` — schema-versioned `sessionStorage` round-trip with quota-safe writes.
+- ✅ `QuestionCard.tsx` — switches on `question.type`, drops to the matching primitive (RadioGroup/CheckboxGroup/RankList/TextAnswer).
+- ✅ Hint UI for `fail_on_hint` rules — Q007 surfaces a "What is a cuppa?" button; clicking it records `hintsUsed: ["cuppa"]` in the response and disables the button. `cuppa` → "What is a cuppa?" lives in a small label map; new hints can be added without code.
+- ✅ `QuizApp.tsx` — `useReducer` wrapping the existing pure session helpers, persists every state change to `sessionStorage`, hydrates on mount, ignores already-completed sessions on reload, and supports a Restart button.
+- ✅ `quiz.astro` mounts `<QuizApp client:load />` and replaces the placeholder.
+- ✅ Resume mid-quiz on reload (verified by test).
+- ✅ Quiz analytics — `quiz_start` fires once when the user lands `in_progress`, `quiz_complete` fires after `completeSession()`. The sink is still a no-op until Phase 6 wires Plausible.
+- ✅ On completion the island redirects to `/results` (placeholder for now; Phase 4 reads the persisted session from sessionStorage).
+
+Tests added: persistence (5), QuestionCard (6), QuizApp (7) — 18 new specs, **72 tests / 18 files** total.
 
 ## ⬜ Phase 4 — Results
 
