@@ -47,9 +47,9 @@ astro.config.mjs         # Astro + integrations + Cloudflare adapter
 src/
 ├── pages/
 │   ├── index.astro      # marketing page (zero JS)
-│   ├── quiz.astro       # mounts <QuizApp client:load />
-│   ├── results.astro    # mounts <ResultsView client:only="react" />
-│   ├── feedback.astro   # mounts <FeedbackForm client:load />
+│   ├── quiz.astro       # inline <script> manually mounts QuizApp via createRoot
+│   ├── results.astro    # inline <script> manually mounts ResultsView via createRoot
+│   ├── feedback.astro   # inline <script> manually mounts FeedbackForm via createRoot
 │   └── 404.astro
 ├── layouts/BaseLayout.astro
 ├── components/
@@ -68,7 +68,8 @@ src/
 └── styles/global.css    # Tailwind 4 @import + @theme tokens
 
 public/
-├── favicon.ico
+├── union-jack.svg       # site favicon + home hero CTA background
+├── favicon.ico          # legacy fallback
 └── personas/            # placeholder SVGs + replacement README
 
 tests/unit/              # Vitest suites against src/lib/* and src/data/*
@@ -152,11 +153,15 @@ export interface QuizSession {
 
 ## 6. Page architecture
 
-- **`/`** — Static Astro page. Hero, three feature cards, CTA to `/quiz`. Footer carries Ko-fi + feedback link. Zero JS.
-- **`/quiz`** — Astro page that mounts `<QuizApp client:load />`. The island contains a reducer-driven flow with one component per question type, a progress bar, and Next/Previous controls. Disabled finish button until all required questions answered.
-- **`/results`** — Astro page that mounts `<ResultsView client:only="react" />` (sessionStorage isn't available during SSR). Shows score, persona card, per-question breakdown, share + retake CTAs.
-- **`/feedback`** — Astro page mounting `<FeedbackForm client:load />` that submits via Astro Actions. Optimistic success state plus mailto fallback if the POST fails.
+- **`/`** — Static Astro page. Hero with the gov.uk-style blue accent bar, framed copy, and a Union Jack CTA linking to `/quiz`. Zero JS.
+- **`/quiz`** — Astro page with a `<div id="quiz-mount" />` and an inline `<script>` that calls `createRoot(...).render(<QuizApp />)`. Per-question Submit + verdict + locked inputs after submit; submitted set persisted in `sessionStorage` (`ulituk:quiz-submitted:v1`). Restart guarded by `window.confirm`. Hint click instantly fails the question.
+- **`/results`** — Same manual-mount pattern (`#results-mount`). Shows score, persona, per-question breakdown (with `Correct answer:` line and the bank's correct-answer comment), share + retake CTAs. Falls back to `?score=&total=` query params for shared URLs.
+- **`/feedback`** — Same manual-mount pattern (`#feedback-mount`). Form submits via the `submitFeedback` Astro Action.
 - **`/404`** — Static not-found page.
+
+### Why manual `createRoot` instead of `client:*` directives
+
+`@astrojs/react@4.4.2` + Astro 5.18 + React 19 hits a renderer bug where the island reports `client-render-time` but never commits any DOM children. We sidestep it by skipping the directive: each interactive page renders an empty mount div and an inline `<script>` that imports the component and calls `createRoot(...).render(...)`. In dev, `BaseLayout.astro` injects the Vite React Refresh preamble (`window.__vite_plugin_react_preamble_installed__ = true`) before any island module loads, since our scripts aren't picked up by the plugin's normal preamble injection.
 
 ---
 
@@ -173,7 +178,7 @@ export interface QuizSession {
 
 ## 8. Analytics, SEO, privacy
 
-- **Plausible** script embedded in `BaseLayout`, with manual events: `quiz_start`, `quiz_complete`, `feedback_submit`, `share_click`, `ko_fi_click`. (Wiring deferred — see Roadmap.)
+- **Plausible** script embedded in `BaseLayout` (only when `PUBLIC_PLAUSIBLE_DOMAIN` is set). Events fired today: `quiz_start`, `quiz_complete`, `feedback_submit`, `share_click`, `ko_fi_click` (the last via click delegation in `BaseLayout` matching `[data-ko-fi-link]`).
 - **SEO** — `<Seo>` Astro helper composes title/description/OG tags. `@astrojs/sitemap` generates `/sitemap-index.xml`. `public/robots.txt` allows everything.
 - **Privacy** — no cookies, no localStorage of PII, no server-side persistence. The optional feedback email is forwarded inside the email body and discarded immediately.
 
