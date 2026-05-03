@@ -1,20 +1,18 @@
 # Unofficial Life in the UK
 
-**Could you become a UK citizen?**
-Take [ACTUAL Life in the UK](https://lifeintheuktestweb.co.uk/) test and find out!
+**Could you become a UK citizen?** Take the [ACTUAL Life in the UK](https://www.gov.uk/life-in-the-uk-test) test and find out!
 
-_Life in the UK_ is an official test you must pass to gain British citizenship.  
-It's famous for having nothing to do with real life in the UK — most of your British friends couldn’t pass it.
+_Life in the UK_ is an official test you must pass to gain British citizenship. It's famous for having nothing to do with real life in the UK — most of your British friends couldn't pass it without studying.
 
-Our **ACTUAL Life in the UK** test has no 1988 Olympics winner, no Tower of London construction year, no who invented the TV: only REAL classics from the REAL United Kingdom!
+Our **UNOFFICIAL Life in the UK** test has no 1988 Olympics, no Tower of London construction: only REAL classics from the REAL United Kingdom!
 
 ## Stack
 
 - **Astro 5** — static-first, with Cloudflare Pages adapter for the feedback POST
-- **React 19** — single hydrated island for the quiz; everything else is zero JS
-- **Tailwind CSS 4** — CSS-first config in `src/styles/global.css`
+- **React 19** — interactive quiz, results, and feedback views mounted via inline `createRoot` scripts (see Architecture.md for why we bypass `@astrojs/react`'s directives)
+- **Tailwind CSS 4** — CSS-first config in `src/styles/global.css`, gov.uk-inspired palette
 - **Zod** — schema validation for questions, personas, and the feedback form
-- **Vitest + @testing-library** — unit tests for the engine and (later) UI islands
+- **Vitest + @testing-library** — unit tests for the engine and React components
 
 ## Requirements
 
@@ -76,13 +74,13 @@ src/
 ├── pages/              # / quiz / results / feedback / 404
 ├── layouts/            # BaseLayout.astro
 ├── components/
-│   ├── astro/          # Static Astro components (header, footer, KoFi)
-│   └── react/          # React island components (built next session)
+│   ├── astro/          # Static Astro components (header, footer, KoFi, SEO)
+│   └── react/          # React components: QuizApp, ResultsView, FeedbackForm + 8 primitives
 ├── lib/                # Framework-free quiz engine + helpers
 ├── data/               # Hand-authored questions + personas + Zod schemas
-├── actions/            # Astro Actions (feedback handler — built next session)
+├── actions/            # Astro Action handling the feedback form (Resend)
 └── styles/global.css   # Tailwind 4 CSS-first config
-public/                 # Static assets (favicon, persona placeholders)
+public/                 # Static assets (union-jack.svg favicon, persona placeholders)
 tests/unit/             # Vitest suites
 docs/                   # PRD, Architecture, QuestionBank, Roadmap
 ```
