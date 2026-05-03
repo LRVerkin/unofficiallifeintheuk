@@ -1,20 +1,26 @@
 ---
 export const prerender = true;
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { ResultsView } from "@/components/react/ResultsView";
 ---
 
-<BaseLayout title="Your Results · Unofficial Life in the UK">
+<BaseLayout title="Your Results · ACTUAL Life in the UK">
   <div class="flex flex-col gap-6">
-    <header>
-      <p class="text-sm uppercase tracking-[0.2rem] text-[var(--color-brand-secondary)]">
-        Unofficial Life in the UK
-      </p>
-      <h1 class="mt-2 font-[var(--font-display)] text-3xl font-semibold sm:text-4xl">
-        Your Results
-      </h1>
+    <header class="border-l-[10px] border-[var(--color-brand-primary)] pl-6">
+      <h1 class="text-3xl font-bold sm:text-4xl">Your Results</h1>
     </header>
 
-    <ResultsView client:only="react" />
+    <div id="results-mount"></div>
   </div>
+
+  <script>
+    import { createRoot } from "react-dom/client";
+    import { createElement } from "react";
+    import { ResultsView } from "@/components/react/ResultsView";
+
+    const container = document.getElementById("results-mount");
+    if (container) {
+      const root = createRoot(container);
+      root.render(createElement(ResultsView));
+    }
+  </script>
 </BaseLayout>

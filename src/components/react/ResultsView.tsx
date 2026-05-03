@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { trackEvent } from "@/lib/analytics";
 import { getPersonaForPercentage } from "@/lib/personas";
 import { clearSession, loadSession } from "@/lib/quiz/persistence";
@@ -38,37 +38,38 @@ function buildShareUrl(origin: string, score: number, total: number): string {
 
 type Source = "session" | "query" | "empty";
 
+interface InitialState {
+  session: QuizSession | null;
+  query: ParsedQuery | null;
+  origin: string;
+}
+
+function readInitial(
+  initialSearch?: string,
+  initialOrigin?: string,
+): InitialState {
+  const loaded = loadSession();
+  const search =
+    initialSearch ?? (typeof window !== "undefined" ? window.location.search : "");
+  const origin =
+    initialOrigin ?? (typeof window !== "undefined" ? window.location.origin : "");
+  return {
+    session: loaded && loaded.status === "completed" ? loaded : null,
+    query: parseQuery(search),
+    origin,
+  };
+}
+
 export function ResultsView({
   retakeHref = "/quiz",
   feedbackHref = "/feedback",
   initialSearch,
   initialOrigin,
 }: ResultsViewProps = {}) {
-  const [hydrated, setHydrated] = useState(false);
-  const [session, setSession] = useState<QuizSession | null>(null);
-  const [query, setQuery] = useState<ParsedQuery | null>(null);
-  const [origin, setOrigin] = useState<string>("");
+  const [{ session, query, origin }] = useState(() =>
+    readInitial(initialSearch, initialOrigin),
+  );
   const [shareMessage, setShareMessage] = useState<string | null>(null);
-
-  useEffect(() => {
-    const loaded = loadSession();
-    setSession(loaded && loaded.status === "completed" ? loaded : null);
-    const search =
-      initialSearch ?? (typeof window !== "undefined" ? window.location.search : "");
-    setQuery(parseQuery(search));
-    setOrigin(
-      initialOrigin ?? (typeof window !== "undefined" ? window.location.origin : ""),
-    );
-    setHydrated(true);
-  }, [initialSearch, initialOrigin]);
-
-  if (!hydrated) {
-    return (
-      <Card aria-busy="true">
-        <p className="text-sm text-[var(--color-muted-foreground)]">Loading your results…</p>
-      </Card>
-    );
-  }
 
   let source: Source = "empty";
   let score = 0;
@@ -90,12 +91,14 @@ export function ResultsView({
   if (source === "empty") {
     return (
       <Card>
-        <h2 className="font-display text-2xl font-semibold">No results yet</h2>
+        <h2 className="text-2xl font-bold">No results yet</h2>
         <p className="mt-2 text-sm text-[var(--color-muted-foreground)]">
-          Take the quiz first — your results land here as soon as you finish.
+          Take the test first — your results land here as soon as you finish.
         </p>
         <div className="mt-6">
-          <Button onClick={() => (window.location.href = retakeHref)}>Take the quiz</Button>
+          <Button onClick={() => (window.location.href = retakeHref)}>
+            Take the test
+          </Button>
         </div>
       </Card>
     );
@@ -133,7 +136,7 @@ export function ResultsView({
       <div className="flex flex-wrap gap-3">
         <Button onClick={onShare}>Share your result</Button>
         <Button variant="secondary" onClick={onRetake}>
-          Retake the quiz
+          Retake the test
         </Button>
         <Button
           variant="ghost"
@@ -151,7 +154,7 @@ export function ResultsView({
 
       {source === "query" && (
         <Alert severity="info">
-          Showing a shared score. Take the quiz yourself to see the per-question
+          Showing a shared score. Take the test yourself to see the per-question
           breakdown.
         </Alert>
       )}

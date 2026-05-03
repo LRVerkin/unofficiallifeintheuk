@@ -20,12 +20,6 @@ const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
     <Seo title={title} description={description} image={image} />
     {
       plausibleDomain && (
@@ -43,9 +37,24 @@ const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN;
         </>
       )
     }
+    {
+      import.meta.env.DEV && (
+        <script
+          type="module"
+          is:inline
+          set:html={`import RefreshRuntime from "/@react-refresh";\nRefreshRuntime.injectIntoGlobalHook(window);\nwindow.$RefreshReg$ = () => {};\nwindow.$RefreshSig$ = () => (type) => type;\nwindow.__vite_plugin_react_preamble_installed__ = true;`}
+        />
+      )
+    }
     <script>
-      import { installPlausibleSink } from "@/lib/analytics";
+      import { installPlausibleSink, trackEvent } from "@/lib/analytics";
       installPlausibleSink();
+      document.addEventListener("click", (event) => {
+        const target = event.target as Element | null;
+        if (target?.closest("[data-ko-fi-link]")) {
+          trackEvent({ name: "ko_fi_click" });
+        }
+      });
     </script>
   </head>
   <body class="antialiased">

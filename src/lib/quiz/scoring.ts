@@ -40,6 +40,10 @@ function similarity(a: string, b: string) {
   return maxLen === 0 ? 1 : 1 - distance / maxLen;
 }
 
+function assertNever(value: never): never {
+  throw new Error(`Unhandled response type: ${JSON.stringify(value)}`);
+}
+
 function selectedOptionIds(response: QuestionResponse): number[] {
   switch (response.type) {
     case "single":
@@ -49,6 +53,8 @@ function selectedOptionIds(response: QuestionResponse): number[] {
       return response.value;
     case "text":
       return [];
+    default:
+      return assertNever(response);
   }
 }
 

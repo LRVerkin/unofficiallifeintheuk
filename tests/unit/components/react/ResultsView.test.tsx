@@ -86,7 +86,7 @@ describe("<ResultsView />", () => {
       screen.queryByRole("region", { name: "Question breakdown" }),
     ).not.toBeInTheDocument();
     expect(
-      screen.getByText(/Take the quiz yourself to see the per-question breakdown/),
+      screen.getByText(/Take the test yourself to see the per-question breakdown/),
     ).toBeInTheDocument();
   });
 

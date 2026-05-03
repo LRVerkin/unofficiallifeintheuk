@@ -1,24 +1,29 @@
 ---
 export const prerender = true;
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { QuizApp } from "@/components/react/QuizApp";
 ---
 
-<BaseLayout title="Take the Quiz · Unofficial Life in the UK">
+<BaseLayout title="ACTUAL Life in the UK · Take the test">
   <div class="flex flex-col gap-6">
-    <header>
-      <p class="text-sm uppercase tracking-[0.2rem] text-[var(--color-brand-secondary)]">
-        Unofficial Life in the UK
-      </p>
-      <h1 class="mt-2 font-[var(--font-display)] text-3xl font-semibold sm:text-4xl">
-        The Quiz
-      </h1>
+    <header class="border-l-[10px] border-[var(--color-brand-primary)] pl-6">
+      <h1 class="text-3xl font-bold sm:text-4xl">The Test</h1>
       <p class="mt-2 max-w-2xl text-base text-[var(--color-muted-foreground)]">
-        24 questions, no logins, no data capture. Pick the wrong tea-making method and the
-        Home Office will be in touch.
+        24 questions. Answer each one — you'll see your result at the end.
       </p>
     </header>
 
-    <QuizApp client:load />
+    <div id="quiz-mount"></div>
   </div>
+
+  <script>
+    import { createRoot } from "react-dom/client";
+    import { createElement } from "react";
+    import { QuizApp } from "@/components/react/QuizApp";
+
+    const container = document.getElementById("quiz-mount");
+    if (container) {
+      const root = createRoot(container);
+      root.render(createElement(QuizApp));
+    }
+  </script>
 </BaseLayout>

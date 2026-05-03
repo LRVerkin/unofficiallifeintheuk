@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import { trackEvent } from "@/lib/analytics";
 import {
   answerQuestion,
@@ -20,7 +20,6 @@ import { QuestionCard } from "./QuestionCard";
 const QUIZ_CONFIG = { questionCount: bank.length, passThreshold: 0.75 };
 
 type Action =
-  | { type: "hydrate"; session: QuizSession }
   | { type: "answer"; response: QuestionResponse }
   | { type: "use_hint"; questionId: string; hintId: string }
   | { type: "next" }
@@ -30,8 +29,6 @@ type Action =
 
 function reducer(state: QuizSession, action: Action): QuizSession {
   switch (action.type) {
-    case "hydrate":
-      return action.session;
     case "answer":
       return answerQuestion(state, action.response);
     case "use_hint": {
@@ -65,6 +62,15 @@ function freshSession(): QuizSession {
   return startSession(createSession(bank, QUIZ_CONFIG));
 }
 
+// Reads persisted session synchronously on first render. Falls back to a fresh
+// session when nothing usable is stored. Safe to call from a useReducer lazy
+// init because loadSession() is a no-op outside the browser.
+function initialSession(): QuizSession {
+  const restored = loadSession();
+  if (restored && restored.status !== "completed") return restored;
+  return freshSession();
+}
+
 interface QuizAppProps {
   resultsHref?: string;
   onComplete?: (session: QuizSession) => void;
@@ -74,29 +80,15 @@ export function QuizApp({
   resultsHref = "/results",
   onComplete,
 }: QuizAppProps = {}) {
-  const [hydrated, setHydrated] = useState(false);
-  const [session, dispatch] = useReducer(reducer, null, freshSession);
+  const [session, dispatch] = useReducer(reducer, null, initialSession);
   const startedRef = useRef(false);
 
-  // Hydrate from sessionStorage once on mount.
   useEffect(() => {
-    const restored = loadSession();
-    if (restored && restored.status !== "completed") {
-      dispatch({ type: "hydrate", session: restored });
-    }
-    setHydrated(true);
-  }, []);
-
-  // Persist after every state change once hydrated.
-  useEffect(() => {
-    if (!hydrated) return;
     saveSession(session);
-  }, [session, hydrated]);
+  }, [session]);
 
-  // Fire quiz_start once when the user makes their first move.
   useEffect(() => {
     if (startedRef.current) return;
-    if (!hydrated) return;
     if (session.status === "in_progress") {
       startedRef.current = true;
       trackEvent({
@@ -104,9 +96,8 @@ export function QuizApp({
         payload: { sessionId: session.id, total: session.questions.length },
       });
     }
-  }, [hydrated, session.status, session.id, session.questions.length]);
+  }, [session.status, session.id, session.questions.length]);
 
-  // On completion: fire analytics, persist, hand off to results, clear storage.
   useEffect(() => {
     if (session.status !== "completed" || !session.result) return;
     trackEvent({
@@ -120,26 +111,17 @@ export function QuizApp({
     });
     onComplete?.(session);
     if (typeof window !== "undefined" && !onComplete) {
-      // Keep results data for /results to read; clear after a brief tick.
       saveSession(session);
       window.location.assign(resultsHref);
     }
   }, [session, resultsHref, onComplete]);
 
-  if (!hydrated) {
-    return (
-      <Card aria-busy="true">
-        <p className="text-sm text-[var(--color-muted-foreground)]">Loading quiz…</p>
-      </Card>
-    );
-  }
-
   if (session.status === "completed") {
     return (
       <Card>
-        <h2 className="font-display text-2xl font-semibold">You finished!</h2>
+        <h2 className="text-2xl font-bold">You finished!</h2>
         <p className="mt-2 text-sm text-[var(--color-muted-foreground)]">
-          Redirecting to your results…
+          Loading your results…
         </p>
       </Card>
     );

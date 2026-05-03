@@ -1,34 +1,29 @@
 ---
-const NAV_LINKS = [
-  { href: "/quiz", label: "Take the Test" },
-  { href: "/results", label: "Results" },
-  { href: "/feedback", label: "Feedback" },
-];
+const pathname = Astro.url.pathname;
+const showCta = pathname !== "/quiz" && pathname !== "/quiz/";
 ---
 
 <header
-  class="sticky top-0 z-20 border-b border-[var(--color-border)] bg-[var(--color-surface)]/85 backdrop-blur supports-[backdrop-filter]:bg-[var(--color-surface)]/85"
+  class="border-b-[10px] border-[var(--color-brand-primary)] bg-[var(--color-foreground)]"
 >
   <div
-    class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"
+    class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8"
   >
-    <a href="/" class="text-lg font-semibold tracking-tight">
-      Unofficial Life in the UK
-    </a>
-    <nav class="hidden gap-6 text-sm font-medium sm:flex">
-      {
-        NAV_LINKS.map((item) => (
-          <a href={item.href} class="hover:text-[var(--color-brand-primary)]">
-            {item.label}
-          </a>
-        ))
-      }
-    </nav>
     <a
-      href="/quiz"
-      class="rounded-full border border-[var(--color-brand-primary)] px-4 py-2 text-sm font-semibold text-[var(--color-brand-primary)] transition hover:bg-[var(--color-brand-primary)] hover:text-white"
+      href="/"
+      class="text-lg font-bold tracking-tight text-white hover:underline sm:text-xl"
     >
-      Start Quiz
+      UNOFFICIAL Life in the UK
     </a>
+    {
+      showCta && (
+        <a
+          href="/quiz"
+          class="inline-flex items-center justify-center bg-[var(--color-brand-accent)] px-4 py-2 text-sm font-bold text-[var(--color-foreground)] shadow-[0_2px_0_var(--color-foreground)] hover:bg-white"
+        >
+          Take the test
+        </a>
+      )
+    }
   </div>
 </header>

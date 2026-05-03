@@ -10,16 +10,22 @@ const {
 } = Astro.props;
 
 const baseStyles =
-  "inline-flex items-center justify-center rounded-full text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-primary)]";
+  "inline-flex items-center justify-center text-sm font-bold transition-colors";
 
 const variantStyles =
   variant === "button"
-    ? "bg-[var(--color-brand-primary)] px-4 py-2 text-white hover:bg-[var(--color-brand-secondary)]"
+    ? "bg-[var(--color-brand-primary)] px-4 py-2 text-white shadow-[0_2px_0_var(--color-foreground)] hover:bg-[var(--color-brand-secondary)]"
     : "text-[var(--color-brand-primary)] underline-offset-2 hover:underline";
 
-const label = variant === "button" ? "Buy us a cuppa on Ko-fi" : "Support on Ko-fi";
+const label = "Support us on Ko-fi";
 ---
 
-<a href={href} target="_blank" rel="noreferrer" class={`${baseStyles} ${variantStyles}`}>
+<a
+  href={href}
+  target="_blank"
+  rel="noreferrer"
+  data-ko-fi-link
+  class={`${baseStyles} ${variantStyles}`}
+>
   {label}
 </a>

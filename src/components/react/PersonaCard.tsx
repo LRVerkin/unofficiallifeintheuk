@@ -17,18 +17,18 @@ export function PersonaCard({ persona, score, total }: PersonaCardProps) {
         alt={persona.image.alt}
         width={160}
         height={160}
-        className="h-40 w-40 flex-shrink-0 rounded-2xl bg-surface-muted object-cover"
+        className="h-40 w-40 flex-shrink-0 bg-[var(--color-surface-muted)] object-cover"
         style={{ borderColor: persona.badgeColor, borderWidth: 4, borderStyle: "solid" }}
       />
       <div className="flex flex-col gap-2">
         <p
-          className="text-sm uppercase tracking-[0.2rem]"
+          className="text-sm font-bold uppercase tracking-[0.2rem]"
           style={{ color: persona.badgeColor }}
         >
           {percentage}% — {score} / {total}
         </p>
-        <h2 className="font-display text-2xl font-semibold sm:text-3xl">{persona.name}</h2>
-        <p className="font-display text-lg italic">{persona.headline}</p>
+        <h2 className="text-2xl font-bold sm:text-3xl">{persona.name}</h2>
+        <p className="text-lg italic">{persona.headline}</p>
         <p className="text-sm text-[var(--color-muted-foreground)]">{persona.description}</p>
       </div>
     </Card>

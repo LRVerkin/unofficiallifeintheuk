@@ -1,24 +1,30 @@
 ---
 export const prerender = true;
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { FeedbackForm } from "@/components/react/FeedbackForm";
 ---
 
-<BaseLayout title="Feedback · Unofficial Life in the UK">
+<BaseLayout title="Suggest a question · ACTUAL Life in the UK">
   <div class="flex flex-col gap-6">
-    <header>
-      <p class="text-sm uppercase tracking-[0.2rem] text-[var(--color-brand-secondary)]">
-        Unofficial Life in the UK
-      </p>
-      <h1 class="mt-2 font-[var(--font-display)] text-3xl font-semibold sm:text-4xl">
-        Suggest a question or send feedback
-      </h1>
+    <header class="border-l-[10px] border-[var(--color-brand-primary)] pl-6">
+      <h1 class="text-3xl font-bold sm:text-4xl">Suggest a question or send feedback</h1>
       <p class="mt-2 max-w-2xl text-base text-[var(--color-muted-foreground)]">
-        We read every submission. Your email is optional and only used to reply — we
-        don&rsquo;t store it.
+        We read every submission. Your email is optional and only used to reply — we don't
+        store it.
       </p>
     </header>
 
-    <FeedbackForm client:load />
+    <div id="feedback-mount"></div>
   </div>
+
+  <script>
+    import { createRoot } from "react-dom/client";
+    import { createElement } from "react";
+    import { FeedbackForm } from "@/components/react/FeedbackForm";
+
+    const container = document.getElementById("feedback-mount");
+    if (container) {
+      const root = createRoot(container);
+      root.render(createElement(FeedbackForm));
+    }
+  </script>
 </BaseLayout>

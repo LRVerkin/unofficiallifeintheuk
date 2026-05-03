@@ -7,7 +7,7 @@ interface CardProps extends HTMLAttributes<HTMLElement> {
 
 export function Card({ as: Tag = "section", className = "", children, ...rest }: CardProps) {
   const base =
-    "rounded-3xl border border-[var(--color-border)] bg-white px-6 py-6 shadow-[var(--shadow-card)]";
+    "border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-6";
   return (
     <Tag className={`${base} ${className}`.trim()} {...rest}>
       {children}

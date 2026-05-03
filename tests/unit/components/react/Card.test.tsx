@@ -31,6 +31,6 @@ describe("<Card />", () => {
     );
     const section = container.querySelector("section")!;
     expect(section.className).toMatch(/extra-class/);
-    expect(section.className).toMatch(/rounded-3xl/);
+    expect(section.className).toMatch(/border/);
   });
 });
