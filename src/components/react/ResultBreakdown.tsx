@@ -1,4 +1,5 @@
 import type { Question } from "@/data/question-schema";
+import { correctAnswerComment, correctAnswerText } from "@/lib/quiz/feedback";
 import { isResponseCorrect } from "@/lib/quiz/scoring";
 import type { QuestionResponse, QuizSession } from "@/lib/quiz/types";
 import { Card } from "./Card";
@@ -36,26 +37,6 @@ function describeUserAnswer(question: Question, response: QuestionResponse): str
   }
 }
 
-function feedbackText(
-  question: Question,
-  response: QuestionResponse,
-  correct: boolean,
-): string | null {
-  const fb = question.feedback;
-  if (!fb) return null;
-  // Per-option feedback (keyed to the user's pick) wins when present, regardless
-  // of correctness — the bank uses these for both "correct, here's why" and
-  // "wrong, here's why" messages.
-  if (question.type === "single" && response.type === "single" && response.value != null) {
-    const perOption = fb[String(response.value)];
-    if (perOption) return perOption;
-  }
-  if (correct) {
-    return fb.overall_correct ?? fb.correct ?? null;
-  }
-  return fb.incorrect ?? null;
-}
-
 export function ResultBreakdown({ session }: ResultBreakdownProps) {
   return (
     <Card aria-label="Question breakdown">
@@ -65,14 +46,15 @@ export function ResultBreakdown({ session }: ResultBreakdownProps) {
           const response = session.answers[question.id];
           const correct = isResponseCorrect(question, response);
           const userAnswer = describeUserAnswer(question, response);
-          const feedback = feedbackText(question, response, correct);
+          const correctAnswer = correctAnswerText(question);
+          const correctComment = correctAnswerComment(question);
           return (
             <li
               key={question.id}
-              className={`rounded-2xl border px-4 py-3 ${
+              className={`rounded-2xl border-l-4 border-y border-r px-4 py-3 ${
                 correct
-                  ? "border-brand-secondary/30 bg-brand-secondary/5"
-                  : "border-brand-primary/30 bg-brand-primary/5"
+                  ? "border-l-[var(--color-success)] border-y-[var(--color-border)] border-r-[var(--color-border)] bg-[var(--color-surface-muted)]"
+                  : "border-l-[var(--color-error)] border-y-[var(--color-border)] border-r-[var(--color-border)] bg-[var(--color-surface-muted)]"
               }`}
             >
               <div className="flex items-start justify-between gap-3">
@@ -80,18 +62,24 @@ export function ResultBreakdown({ session }: ResultBreakdownProps) {
                   Q{String(index + 1).padStart(2, "0")}
                 </p>
                 <span
-                  className={`text-xs font-semibold uppercase ${
-                    correct ? "text-brand-secondary" : "text-brand-primary"
+                  className={`text-xs font-bold uppercase ${
+                    correct ? "text-[var(--color-success)]" : "text-[var(--color-error)]"
                   }`}
                 >
                   {correct ? "Correct" : "Incorrect"}
                 </span>
               </div>
-              <p className="mt-2 font-display text-lg">{question.prompt}</p>
+              <p className="mt-2 text-lg font-semibold">{question.prompt}</p>
               <p className="mt-2 text-sm text-[var(--color-muted-foreground)]">
                 <span className="font-semibold">Your answer:</span> {userAnswer}
               </p>
-              {feedback && <p className="mt-2 text-sm">{feedback}</p>}
+              {!correct && (
+                <p className="mt-1 text-sm text-[var(--color-muted-foreground)]">
+                  <span className="font-semibold">Correct answer:</span>{" "}
+                  {correctAnswer}
+                </p>
+              )}
+              {correctComment && <p className="mt-2 text-sm">{correctComment}</p>}
             </li>
           );
         })}

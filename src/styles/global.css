@@ -59,3 +59,52 @@ body {
   background: var(--color-brand-accent);
   color: var(--color-foreground);
 }
+
+@keyframes rank-bump-up {
+  0% {
+    transform: translateY(2.75rem);
+    opacity: 0.6;
+  }
+
+  60% {
+    transform: translateY(-4px);
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes rank-bump-down {
+  0% {
+    transform: translateY(-2.75rem);
+    opacity: 0.6;
+  }
+
+  60% {
+    transform: translateY(4px);
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+[data-bumped="up"] {
+  animation: rank-bump-up 220ms ease-out;
+}
+
+[data-bumped="down"] {
+  animation: rank-bump-down 220ms ease-out;
+}
+
+[data-rank-dragging="true"] {
+  opacity: 0.4;
+}
+
+[data-rank-drop-target="true"] {
+  outline: 2px dashed var(--color-brand-primary);
+  outline-offset: -2px;
+}

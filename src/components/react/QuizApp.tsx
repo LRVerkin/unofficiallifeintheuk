@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { trackEvent } from "@/lib/analytics";
 import {
   answerQuestion,
@@ -8,6 +8,8 @@ import {
   goToPreviousQuestion,
   startSession,
 } from "@/lib/quiz/session";
+import { feedbackText } from "@/lib/quiz/feedback";
+import { isResponseCorrect } from "@/lib/quiz/scoring";
 import { clearSession, loadSession, saveSession } from "@/lib/quiz/persistence";
 import type { QuestionResponse, QuizSession } from "@/lib/quiz/types";
 import { questions as bank } from "@/data/questions";
@@ -23,6 +25,7 @@ type Action =
   | { type: "answer"; response: QuestionResponse }
   | { type: "use_hint"; questionId: string; hintId: string }
   | { type: "next" }
+  | { type: "force_next" }
   | { type: "prev" }
   | { type: "complete" }
   | { type: "reset"; session: QuizSession };
@@ -47,6 +50,11 @@ function reducer(state: QuizSession, action: Action): QuizSession {
     }
     case "next":
       return goToNextQuestion(state);
+    case "force_next":
+      return {
+        ...state,
+        currentIndex: Math.min(state.currentIndex + 1, state.questions.length - 1),
+      };
     case "prev":
       return goToPreviousQuestion(state);
     case "complete":
@@ -71,6 +79,32 @@ function initialSession(): QuizSession {
   return freshSession();
 }
 
+const SUBMITTED_STORAGE_KEY = "ulituk:quiz-submitted:v1";
+
+function loadSubmitted(): Set<string> {
+  if (typeof window === "undefined") return new Set();
+  try {
+    const raw = window.sessionStorage.getItem(SUBMITTED_STORAGE_KEY);
+    if (!raw) return new Set();
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? new Set(parsed.filter((id) => typeof id === "string")) : new Set();
+  } catch {
+    return new Set();
+  }
+}
+
+function saveSubmitted(submitted: Set<string>): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem(
+      SUBMITTED_STORAGE_KEY,
+      JSON.stringify([...submitted]),
+    );
+  } catch {
+    // Quota / serialisation failure — in-memory state remains authoritative.
+  }
+}
+
 interface QuizAppProps {
   resultsHref?: string;
   onComplete?: (session: QuizSession) => void;
@@ -81,11 +115,16 @@ export function QuizApp({
   onComplete,
 }: QuizAppProps = {}) {
   const [session, dispatch] = useReducer(reducer, null, initialSession);
+  const [submitted, setSubmitted] = useState<Set<string>>(loadSubmitted);
   const startedRef = useRef(false);
 
   useEffect(() => {
     saveSession(session);
   }, [session]);
+
+  useEffect(() => {
+    saveSubmitted(submitted);
+  }, [submitted]);
 
   useEffect(() => {
     if (startedRef.current) return;
@@ -130,7 +169,34 @@ export function QuizApp({
   const current = session.questions[session.currentIndex];
   const response = session.answers[current.id];
   const isLast = session.currentIndex === session.questions.length - 1;
-  const canAdvance = response.status === "answered" || !current.required;
+  const isAnswered = response.status === "answered";
+  const isSubmitted = submitted.has(current.id);
+  const usedHint = (response.hintsUsed?.length ?? 0) > 0;
+  const isCorrect = isSubmitted ? isResponseCorrect(current, response) : false;
+  const explanation = isSubmitted ? feedbackText(current, response, isCorrect) : null;
+
+  function handleSubmit() {
+    setSubmitted((prev) => {
+      const next = new Set(prev);
+      next.add(current.id);
+      return next;
+    });
+  }
+
+  function handleAnswer(next: QuestionResponse) {
+    if (submitted.has(current.id)) return;
+    dispatch({ type: "answer", response: next });
+  }
+
+  function handleHint(hintId: string) {
+    if (submitted.has(current.id)) return;
+    dispatch({ type: "use_hint", questionId: current.id, hintId });
+    setSubmitted((prev) => {
+      const next = new Set(prev);
+      next.add(current.id);
+      return next;
+    });
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -144,13 +210,25 @@ export function QuizApp({
         response={response}
         questionNumber={session.currentIndex + 1}
         totalQuestions={session.questions.length}
-        onAnswer={(next) => dispatch({ type: "answer", response: next })}
-        onUseHint={(hintId) =>
-          dispatch({ type: "use_hint", questionId: current.id, hintId })
-        }
+        onAnswer={handleAnswer}
+        onUseHint={handleHint}
+        disabled={isSubmitted}
       />
 
-      {!canAdvance && current.required && (
+      {isSubmitted && (
+        <Alert severity={isCorrect ? "success" : "error"}>
+          <p className="font-bold">
+            {usedHint
+              ? "Question failed — you should know."
+              : isCorrect
+                ? "Correct!"
+                : "Not quite."}
+          </p>
+          {explanation && <p className="mt-1">{explanation}</p>}
+        </Alert>
+      )}
+
+      {!isAnswered && current.required && !isSubmitted && (
         <Alert severity="info">Pick an answer to continue.</Alert>
       )}
 
@@ -163,28 +241,39 @@ export function QuizApp({
           ← Previous
         </Button>
         <Button
-          variant="secondary"
+          variant="ghost"
           onClick={() => {
+            const ok =
+              typeof window === "undefined"
+                ? true
+                : window.confirm(
+                    "Restart the test? Your current answers will be lost.",
+                  );
+            if (!ok) return;
             clearSession();
-            dispatch({ type: "reset", session: freshSession() });
+            setSubmitted(new Set());
             startedRef.current = false;
+            dispatch({ type: "reset", session: freshSession() });
           }}
         >
           Restart
         </Button>
-        {isLast ? (
+        {!isSubmitted ? (
           <Button
             variant="primary"
-            onClick={() => dispatch({ type: "complete" })}
-            disabled={!canAdvance}
+            onClick={handleSubmit}
+            disabled={!isAnswered && current.required}
           >
+            Submit answer
+          </Button>
+        ) : isLast ? (
+          <Button variant="primary" onClick={() => dispatch({ type: "complete" })}>
             Finish
           </Button>
         ) : (
           <Button
             variant="primary"
-            onClick={() => dispatch({ type: "next" })}
-            disabled={!canAdvance}
+            onClick={() => dispatch({ type: "force_next" })}
           >
             Next →
           </Button>

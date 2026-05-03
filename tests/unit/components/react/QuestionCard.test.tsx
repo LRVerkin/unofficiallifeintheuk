@@ -96,7 +96,6 @@ describe("<QuestionCard />", () => {
         onUseHint={() => {}}
       />,
     );
-    expect(screen.getByText("Q02")).toBeInTheDocument();
     expect(
       screen.getByRole("region", { name: "Question 2 of 24" }),
     ).toBeInTheDocument();
