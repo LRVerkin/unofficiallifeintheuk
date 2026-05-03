@@ -1,0 +1,33 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  pathname?: string;
+}
+
+const {
+  title = "Unofficial Life in the UK",
+  description = "A fast, tongue-in-cheek Life in the UK quiz with personas, witty results, and zero bureaucracy.",
+  image,
+  pathname,
+} = Astro.props;
+
+const site = Astro.site?.toString() ?? "https://unofficiallifeinthe.uk";
+const path = pathname ?? Astro.url.pathname;
+const canonical = new URL(path, site).toString();
+const ogImage = image ? new URL(image, site).toString() : undefined;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonical} />
+{ogImage && <meta property="og:image" content={ogImage} />}
+<meta name="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{ogImage && <meta name="twitter:image" content={ogImage} />}

@@ -8,6 +8,14 @@ It's famous for having nothing to do with real life in the UK — most of your B
 
 Our **ACTUAL Life in the UK** test has no 1988 Olympics winner, no Tower of London construction year, no who invented the TV: only REAL classics from the REAL United Kingdom!
 
+## Stack
+
+- **Astro 5** — static-first, with Cloudflare Pages adapter for the feedback POST
+- **React 19** — single hydrated island for the quiz; everything else is zero JS
+- **Tailwind CSS 4** — CSS-first config in `src/styles/global.css`
+- **Zod** — schema validation for questions, personas, and the feedback form
+- **Vitest + @testing-library** — unit tests for the engine and (later) UI islands
+
 ## Requirements
 
 - **Node.js**: v20.11 or newer (LTS recommended). Install via [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm).
@@ -19,15 +27,14 @@ Our **ACTUAL Life in the UK** test has no 1988 Olympics winner, no Tower of Lond
   corepack enable pnpm   # preferred
   pnpm -v                # should print >= 10
   ```
-- **Git hooks**: After installing dependencies run `git config core.hooksPath .husky` (or `pnpm prepare`) so Husky can run pre-commit checks.
 
-## Getting Started
+## Getting started
 
-1. Clone the repo and install dependencies:
+1. Install dependencies:
    ```bash
    pnpm install
    ```
-2. Copy environment variables and fill in secrets:
+2. Copy the example env file and fill in any secrets you need locally:
    ```bash
    cp .env.example .env
    ```
@@ -35,57 +42,63 @@ Our **ACTUAL Life in the UK** test has no 1988 Olympics winner, no Tower of Lond
    ```bash
    pnpm dev
    ```
-   Visit http://localhost:3000 to verify the placeholder marketing page renders.
+   Visit http://localhost:4321 to see the site.
 
 ## Scripts
 
-| Script                    | Description                                                                                                      |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `pnpm dev`                | Start Next.js in development mode.                                                                               |
-| `pnpm build`              | Create a production build.                                                                                       |
-| `pnpm start`              | Serve the production build locally.                                                                              |
-| `pnpm lint`               | Run ESLint with the shared config.                                                                               |
-| `pnpm lint:styles`        | Lint CSS with Stylelint.                                                                                         |
-| `pnpm typecheck`          | Run TypeScript in no-emit mode.                                                                                  |
-| `pnpm test:unit`          | Execute Vitest (jsdom environment) with coverage configuration.                                                  |
-| `pnpm test:integration`   | Reserved for future Vitest integration suites.                                                                   |
-| `pnpm test:e2e`           | Placeholder until Playwright lands (Step 9).                                                                     |
-| `pnpm format`             | Format files with Prettier.                                                                                      |
-| `pnpm generate:questions` | Parse `docs/QuestionBank.md` and regenerate `data/questions.ts` (also runs before `build` and during `prepare`). |
+| Script             | Description                                        |
+| ------------------ | -------------------------------------------------- |
+| `pnpm dev`         | Start Astro in development mode.                   |
+| `pnpm build`       | Create a production build (output in `dist/`).     |
+| `pnpm preview`     | Serve the production build locally.                |
+| `pnpm typecheck`   | Run `astro check` and `tsc --noEmit`.              |
+| `pnpm lint`        | Run ESLint with the Astro plugin.                  |
+| `pnpm lint:styles` | Lint CSS with Stylelint.                           |
+| `pnpm test:unit`   | Execute Vitest (jsdom environment).                |
+| `pnpm test:e2e`    | Placeholder — Playwright lands in a later session. |
+| `pnpm format`      | Format files with Prettier.                        |
 
-Husky + lint-staged run ESLint, Stylelint, and Prettier on staged files before commits once hooks are enabled.
+Husky + lint-staged run ESLint, Stylelint, and Prettier on staged files before commits.
 
-## Content Workflow
+## Content workflow
 
-1. Edit questions in `docs/QuestionBank.md` or persona metadata in `data/personas.ts`.
-2. Run `pnpm generate:questions` to sync the strongly typed module.
-3. Execute `pnpm test:unit` to ensure the parser + persona coverage tests stay green.
+Questions live in [`src/data/questions.ts`](src/data/questions.ts) as a hand-authored TypeScript module, validated at module load by Zod.
 
-The generator fails fast if required fields are missing or IDs collide, keeping the Markdown source honest.
+[`docs/QuestionBank.md`](docs/QuestionBank.md) is the human-readable reference; if you edit it, propagate the change to `src/data/questions.ts` (and vice-versa). The Markdown file is no longer parsed at build time.
 
-## Project Structure
+Persona metadata lives in [`src/data/personas.ts`](src/data/personas.ts). Placeholder artwork is in [`public/personas/`](public/personas/) — see the README in that folder for replacement instructions.
+
+## Project structure
 
 ```
-app/              # App Router entries, layout, global styles
-components/       # Shared UI, layout, and CTA components
-lib/              # Domain utilities (quiz engine will live here)
-data/             # Generated question/persona modules
-scripts/          # Build-time utilities (e.g., question generator)
-tests/            # Vitest suites (unit/integration placeholders)
-docs/             # PRD, architecture, workplans
+astro.config.mjs        # Astro + integrations + Cloudflare adapter
+src/
+├── pages/              # / quiz / results / feedback / 404
+├── layouts/            # BaseLayout.astro
+├── components/
+│   ├── astro/          # Static Astro components (header, footer, KoFi)
+│   └── react/          # React island components (built next session)
+├── lib/                # Framework-free quiz engine + helpers
+├── data/               # Hand-authored questions + personas + Zod schemas
+├── actions/            # Astro Actions (feedback handler — built next session)
+└── styles/global.css   # Tailwind 4 CSS-first config
+public/                 # Static assets (favicon, persona placeholders)
+tests/unit/             # Vitest suites
+docs/                   # PRD, Architecture, QuestionBank, Roadmap
 ```
 
-## Environment Variables (`.env`)
+## Environment variables
 
-| Name                    | Description                                                      |
-| ----------------------- | ---------------------------------------------------------------- |
-| `RESEND_API_KEY`        | API key for outbound feedback emails (server only).              |
-| `PLAUSIBLE_DOMAIN`      | Domain used by Plausible analytics script.                       |
-| `KO_FI_URL`             | Server-only Ko-fi configuration (e.g., for API calls if needed). |
-| `NEXT_PUBLIC_KO_FI_URL` | Public Ko-fi link used by CTA components.                        |
-| `NEXT_PUBLIC_SITE_URL`  | Canonical site URL for metadata.                                 |
+| Name                      | Description                                                           |
+| ------------------------- | --------------------------------------------------------------------- |
+| `RESEND_API_KEY`          | API key for outbound feedback emails (server-only).                   |
+| `FEEDBACK_TO_EMAIL`       | Inbox that receives forwarded feedback messages.                      |
+| `FEEDBACK_FROM_EMAIL`     | Sender used by the feedback action; must be a Resend-verified domain. |
+| `PUBLIC_KO_FI_URL`        | Public Ko-fi link used by the donation CTA.                           |
+| `PUBLIC_PLAUSIBLE_DOMAIN` | Domain registered with Plausible for the analytics script.            |
 
-## Next Steps
+`PUBLIC_*` values are exposed to the browser; everything else is server-only.
 
-- Step 3 builds the quiz engine modules in `lib/quiz` using the new testing stack.
-- Step 4 layers on the shared design system and production-ready UI primitives.
+## Roadmap
+
+See [`docs/Roadmap.md`](docs/Roadmap.md) for the prioritised list of remaining work (quiz UI, results, feedback form, analytics, persona artwork, CI, etc.).

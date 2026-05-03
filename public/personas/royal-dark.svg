@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-label="Royal Standard Bearer placeholder (dark)">
+  <rect width="600" height="600" fill="#0B0C0C"/>
+  <rect x="40" y="40" width="520" height="520" fill="none" stroke="#FFB81C" stroke-width="6" stroke-dasharray="14 10"/>
+  <text x="300" y="240" text-anchor="middle" font-family="'Space Grotesk', Inter, sans-serif" font-size="44" font-weight="700" fill="#FFB81C">Royal Standard</text>
+  <text x="300" y="290" text-anchor="middle" font-family="'Space Grotesk', Inter, sans-serif" font-size="44" font-weight="700" fill="#FFB81C">Bearer</text>
+  <text x="300" y="370" text-anchor="middle" font-family="Inter, sans-serif" font-size="22" fill="#DADFE5">royal · ≥ 90%</text>
+  <text x="300" y="500" text-anchor="middle" font-family="'Space Mono', monospace" font-size="18" fill="#D4003C">PLACEHOLDER</text>
+</svg>

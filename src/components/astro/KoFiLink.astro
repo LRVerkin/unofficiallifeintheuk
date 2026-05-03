@@ -1,0 +1,25 @@
+---
+interface Props {
+  href?: string;
+  variant?: "link" | "button";
+}
+
+const {
+  href = import.meta.env.PUBLIC_KO_FI_URL ?? "https://ko-fi.com/",
+  variant = "link",
+} = Astro.props;
+
+const baseStyles =
+  "inline-flex items-center justify-center rounded-full text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-primary)]";
+
+const variantStyles =
+  variant === "button"
+    ? "bg-[var(--color-brand-primary)] px-4 py-2 text-white hover:bg-[var(--color-brand-secondary)]"
+    : "text-[var(--color-brand-primary)] underline-offset-2 hover:underline";
+
+const label = variant === "button" ? "Buy us a cuppa on Ko-fi" : "Support on Ko-fi";
+---
+
+<a href={href} target="_blank" rel="noreferrer" class={`${baseStyles} ${variantStyles}`}>
+  {label}
+</a>

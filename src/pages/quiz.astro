@@ -1,0 +1,24 @@
+---
+export const prerender = true;
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { QuizApp } from "@/components/react/QuizApp";
+---
+
+<BaseLayout title="Take the Quiz · Unofficial Life in the UK">
+  <div class="flex flex-col gap-6">
+    <header>
+      <p class="text-sm uppercase tracking-[0.2rem] text-[var(--color-brand-secondary)]">
+        Unofficial Life in the UK
+      </p>
+      <h1 class="mt-2 font-[var(--font-display)] text-3xl font-semibold sm:text-4xl">
+        The Quiz
+      </h1>
+      <p class="mt-2 max-w-2xl text-base text-[var(--color-muted-foreground)]">
+        24 questions, no logins, no data capture. Pick the wrong tea-making method and the
+        Home Office will be in touch.
+      </p>
+    </header>
+
+    <QuizApp client:load />
+  </div>
+</BaseLayout>

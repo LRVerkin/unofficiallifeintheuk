@@ -3,12 +3,13 @@ import { validateResponse, canAdvance } from "@/lib/quiz/validators";
 import type { QuizQuestion } from "@/lib/quiz/types";
 
 const multiQuestion: QuizQuestion = {
-  id: "Q1",
+  id: "Q001",
   type: "multiple",
   prompt: "Pick two",
   required: true,
   tags: ["test"],
   specialRules: [],
+  credits: [],
   options: [
     { id: 1, label: "A" },
     { id: 2, label: "B" },
@@ -20,7 +21,7 @@ const multiQuestion: QuizQuestion = {
 describe("validators", () => {
   it("deduplicates multi-select answers", () => {
     const validated = validateResponse(multiQuestion, {
-      questionId: "Q1",
+      questionId: "Q001",
       type: "multiple",
       value: [1, 1, 2, 4],
       status: "answered",
@@ -31,7 +32,7 @@ describe("validators", () => {
 
   it("prevents advancing when required answers are missing", () => {
     const response = validateResponse(multiQuestion, {
-      questionId: "Q1",
+      questionId: "Q001",
       type: "multiple",
       value: [],
       status: "unanswered",

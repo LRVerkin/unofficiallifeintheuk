@@ -1,0 +1,28 @@
+---
+const koFiUrl = import.meta.env.PUBLIC_KO_FI_URL ?? "https://ko-fi.com/";
+---
+
+<footer class="border-t border-[var(--color-border)] bg-[var(--color-surface)] text-sm">
+  <div
+    class="mx-auto flex max-w-5xl flex-col gap-3 px-4 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8"
+  >
+    <p class="text-[var(--color-muted-foreground)]">
+      This is an unofficial parody of the Life in the UK test. No lawyers were harmed in
+      the making of these questions.
+    </p>
+    <div class="flex flex-wrap gap-3 text-sm">
+      <a href="/feedback" class="underline-offset-2 hover:underline">
+        Suggest a question
+      </a>
+      <span aria-hidden="true">•</span>
+      <a
+        href={koFiUrl}
+        target="_blank"
+        rel="noreferrer"
+        class="underline-offset-2 hover:underline"
+      >
+        Support on Ko-fi
+      </a>
+    </div>
+  </div>
+</footer>
