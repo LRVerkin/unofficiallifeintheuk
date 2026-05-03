@@ -20,21 +20,21 @@ const personaListSchema = z
     const sorted = [...list].sort((a, b) => a.minPercentage - b.minPercentage);
     if (sorted[0]?.minPercentage !== 0) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message: "Persona ranges must start at 0%",
       });
     }
     for (let index = 1; index < sorted.length; index += 1) {
       if (sorted[index].minPercentage <= sorted[index - 1].minPercentage) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           message: "Persona minPercentage values must be strictly ascending",
         });
       }
     }
     if (sorted[sorted.length - 1]?.minPercentage > 100) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message: "Persona ranges cannot exceed 100%",
       });
     }

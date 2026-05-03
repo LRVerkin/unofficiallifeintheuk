@@ -55,7 +55,7 @@ export const singleChoiceQuestionSchema = baseQuestionSchema
     for (const value of question.correct) {
       if (value > question.options.length) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           message: `Correct option ${value} is out of range for question ${question.id}`,
           path: ["correct"],
         });
@@ -75,7 +75,7 @@ export const multipleChoiceQuestionSchema = baseQuestionSchema
     for (const value of question.correct) {
       if (value > optionCount) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           message: `Correct option ${value} is out of range for question ${question.id}`,
           path: ["correct"],
         });
@@ -83,7 +83,7 @@ export const multipleChoiceQuestionSchema = baseQuestionSchema
     }
     if (question.minRequired && question.minRequired > question.correct.length) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message: `minRequired cannot exceed number of correct answers for ${question.id}`,
         path: ["minRequired"],
       });
@@ -99,7 +99,7 @@ export const rankQuestionSchema = baseQuestionSchema
   .superRefine((question, ctx) => {
     if (question.correct.length !== question.options.length) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message: `Rank question ${question.id} must specify the same number of answers as options`,
         path: ["correct"],
       });
@@ -137,7 +137,7 @@ export const questionListSchema = z
     for (const question of questions) {
       if (ids.has(question.id)) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           message: `Duplicate question id ${question.id}`,
           path: [question.id],
         });

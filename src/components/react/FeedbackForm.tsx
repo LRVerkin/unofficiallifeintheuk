@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { ComponentProps } from "react";
 import { trackEvent } from "@/lib/analytics";
 import { Alert } from "./Alert";
 import { Button } from "./Button";
@@ -43,7 +44,9 @@ export function FeedbackForm({ submitter = defaultSubmitter }: FeedbackFormProps
   const tooShort = trimmedLength > 0 && trimmedLength < MIN_LENGTH;
   const canSubmit = trimmedLength >= MIN_LENGTH && status !== "submitting";
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  type FormSubmitEvent = Parameters<NonNullable<ComponentProps<"form">["onSubmit"]>>[0];
+
+  async function onSubmit(event: FormSubmitEvent) {
     event.preventDefault();
     if (!canSubmit) return;
     setStatus("submitting");

@@ -30,7 +30,7 @@ Replaced Next.js 16 / React 19 with Astro 5 + React island + Tailwind 4. The mig
 
 ### Known small follow-ups (carry into the next session)
 
-- ⬜ Replace deprecated `z.ZodIssueCode.custom` with the string literal `code: "custom"` in `src/data/personas.ts` (3 sites) and `src/data/question-schema.ts` (5 sites). 8 hints today; cosmetic in Zod 4 but loud in `astro check`.
+- ✅ Replaced deprecated `z.ZodIssueCode.custom` with the string literal `code: "custom"` in `src/data/personas.ts` and `src/data/question-schema.ts` (8 sites total). Down to 0 hints (Phase 8).
 - ⬜ Add a comment on `src/lib/personas.ts` explaining that `getPersonaForPercentage` relies on `personas` being sorted descending in `src/data/personas.ts:117`. The find-and-take-first is fragile if anyone re-sorts.
 - ⬜ Make scoring's `selectedOptionIds` switch exhaustive (`default: assertNever(...)` or similar) so adding a new response type is a TS error, not silent fall-through.
 
@@ -109,14 +109,14 @@ Tests added (4): plausibleSink forwards / no-ops / handles empty payload, sink c
 - ✅ GitHub Actions `ci.yml` — install (frozen lockfile) → eslint → stylelint → astro check + tsc → vitest → build, on every PR and push to main. Concurrency group cancels in-flight runs on the same ref.
 - ⬜ Playwright happy-path e2e: start → answer all → results → share → feedback. Deferred to Phase 9 — the unit suite already covers the engine and components, and a meaningful e2e wants a deployed preview to run against.
 
-## ⬜ Phase 8 — Deploy
+## 🟡 Phase 8 — Deploy (config landed; manual steps remain)
 
-- ⬜ Cloudflare Pages connected to GitHub.
-- ⬜ Production env vars set (`RESEND_API_KEY`, `FEEDBACK_TO_EMAIL`, `PUBLIC_KO_FI_URL`, `PUBLIC_PLAUSIBLE_DOMAIN`).
-- ⬜ Add `wrangler.toml` (or `wrangler.jsonc`) with at minimum a `name` and any KV bindings the rate limiter ends up using. Today's build emits a warning: _"Enabling sessions with Cloudflare KV with the 'SESSION' KV binding... you need to add the binding to your wrangler config file."_ — silence it by either declaring the `SESSION` binding or disabling sessions on the adapter.
-- ⬜ Security headers (CSP, X-Content-Type-Options, Referrer-Policy) via Cloudflare Pages dashboard or a `_headers` file in `public/`.
-- ⬜ Lighthouse audit on the deployed site (target ≥ 95 perf / a11y / best practices).
-- ⬜ Final persona artwork commissioned and dropped into `public/personas/`.
+- ⬜ Cloudflare Pages connected to GitHub. **Manual** — connect in the dashboard and point at the `main` branch.
+- ⬜ Production env vars set (`RESEND_API_KEY`, `FEEDBACK_TO_EMAIL`, `PUBLIC_KO_FI_URL`, `PUBLIC_PLAUSIBLE_DOMAIN`). **Manual** — add via Pages → Settings → Environment variables.
+- ✅ `wrangler.toml` declares the `SESSION` KV binding so `@astrojs/cloudflare` stops emitting the build warning. The `id` is a placeholder — replace with the real KV namespace id from `wrangler kv namespace create SESSION` before deploy.
+- ✅ `public/_headers` ships a sensible CSP (`script-src 'self' 'unsafe-inline' https://plausible.io`, `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`, etc.) plus `X-Content-Type-Options`, `Referrer-Policy`, and `Permissions-Policy`. Cloudflare Pages applies `_headers` to every response.
+- ⬜ Lighthouse audit on the deployed site (target ≥ 95 perf / a11y / best practices). **Post-deploy.**
+- ⬜ Final persona artwork commissioned and dropped into `public/personas/`. Placeholders ship in the meantime; see [`public/personas/README.md`](../public/personas/README.md).
 
 ## ⬜ Phase 9 — Post-launch
 
