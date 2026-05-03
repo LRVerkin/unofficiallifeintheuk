@@ -2,16 +2,16 @@
 import "@/styles/global.css";
 import SiteHeader from "@/components/astro/SiteHeader.astro";
 import SiteFooter from "@/components/astro/SiteFooter.astro";
+import Seo from "@/components/astro/Seo.astro";
 
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
 }
 
-const {
-  title = "Unofficial Life in the UK",
-  description = "A fast, tongue-in-cheek Life in the UK quiz with personas, witty results, and zero bureaucracy.",
-} = Astro.props;
+const { title, description, image } = Astro.props;
+const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN;
 ---
 
 <!doctype html>
@@ -26,12 +26,27 @@ const {
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <Seo title={title} description={description} image={image} />
+    {
+      plausibleDomain && (
+        <>
+          <script
+            is:inline
+            defer
+            data-domain={plausibleDomain}
+            src="https://plausible.io/js/script.js"
+          />
+          <script
+            is:inline
+            set:html={`window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }`}
+          />
+        </>
+      )
+    }
+    <script>
+      import { installPlausibleSink } from "@/lib/analytics";
+      installPlausibleSink();
+    </script>
   </head>
   <body class="antialiased">
     <a href="#main" class="skip-link">Skip to main content</a>

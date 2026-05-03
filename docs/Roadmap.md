@@ -89,13 +89,18 @@ Tests added (15): PersonaCard (4), ResultBreakdown (5), ResultsView (6) — **87
 
 Tests added (10): `formatFeedbackEmail` (4), FeedbackForm (6) — **97 tests / 23 files** total.
 
-## ⬜ Phase 6 — Analytics & SEO
+## ✅ Phase 6 — Analytics & SEO (complete)
 
-- ⬜ Plausible script embedded in `BaseLayout` driven by `PUBLIC_PLAUSIBLE_DOMAIN`.
-- ⬜ `lib/analytics.ts` wired to `plausible(...)` calls.
-- ⬜ `Seo.astro` helper: title/description/OG/twitter, dynamic per page.
-- ⬜ Tighten `@astrojs/sitemap` config — `sitemap-index.xml` is already generated each build, but exclude `/404` and dedupe `/feedback` once routes settle (`sitemap({ filter: page => !page.endsWith('/404') })`).
-- ⬜ `public/robots.txt`.
+- ✅ Plausible script embedded in `BaseLayout` when `PUBLIC_PLAUSIBLE_DOMAIN` is set; absent in local dev. Includes the standard queue shim so `window.plausible(...)` calls placed before the script loads still get flushed.
+- ✅ `src/lib/analytics.ts` extended: `plausibleSink` forwards events as `window.plausible(name, { props })` (no-op when the script hasn't loaded), `installPlausibleSink()` swaps the configured sink. `BaseLayout` calls the installer on every page so the React islands' `trackEvent` calls automatically forward to Plausible in production.
+- ✅ `src/components/astro/Seo.astro` — single helper for `<title>`, `<meta description>`, canonical link, OG, and Twitter tags. Derives the canonical URL from `Astro.site` + the current pathname; supports an optional `image` for richer share cards.
+- ✅ `@astrojs/sitemap` filter excludes `/404`. `sitemap-index.xml` continues to generate at build.
+- ✅ `public/robots.txt` allows everything and points crawlers at the sitemap.
+- ⬜ `ko_fi_click` event — tracked as a small follow-up; needs a small client component for the footer's KoFi link.
+
+Side fix: the analytics installer is a tiny inline `<script>` (~234 B raw), so every page ships at least 1 `<script>` tag now (was 0 for marketing pages). Acceptable trade for unified analytics.
+
+Tests added (4): plausibleSink forwards / no-ops / handles empty payload, sink configuration round-trip — **101 tests / 24 files** total.
 
 ## ⬜ Phase 7 — Quality gates
 
