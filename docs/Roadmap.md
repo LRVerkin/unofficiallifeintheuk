@@ -102,12 +102,12 @@ Side fix: the analytics installer is a tiny inline `<script>` (~234 B raw), so e
 
 Tests added (4): plausibleSink forwards / no-ops / handles empty payload, sink configuration round-trip — **101 tests / 24 files** total.
 
-## ⬜ Phase 7 — Quality gates
+## ✅ Phase 7 — Quality gates (mostly complete)
 
-- ⬜ Vitest + RTL coverage for the new React components.
-- ⬜ Playwright happy-path e2e: start → answer all → results → share → feedback.
-- ⬜ Bidirectional drift test: every `Q\d{3}` ID in `docs/QuestionBank.md` must appear in `src/data/questions.ts` AND vice versa. Cheap regex scan, no parser needed.
-- ⬜ GitHub Actions `ci.yml` — install, lint, typecheck, unit tests, build.
+- ✅ Vitest + RTL coverage shipped alongside Phases 2–6 (104 tests across 25 files).
+- ✅ Bidirectional drift test (`tests/unit/data/question-drift.spec.ts`) — every `Q\d{3}` ID in `docs/QuestionBank.md` exists in `src/data/questions.ts` and vice versa, plus a duplicate guard on the markdown side. Cheap regex scan, no parser needed.
+- ✅ GitHub Actions `ci.yml` — install (frozen lockfile) → eslint → stylelint → astro check + tsc → vitest → build, on every PR and push to main. Concurrency group cancels in-flight runs on the same ref.
+- ⬜ Playwright happy-path e2e: start → answer all → results → share → feedback. Deferred to Phase 9 — the unit suite already covers the engine and components, and a meaningful e2e wants a deployed preview to run against.
 
 ## ⬜ Phase 8 — Deploy
 
