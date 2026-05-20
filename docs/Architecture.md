@@ -153,7 +153,11 @@ export interface QuizSession {
 ## 6. Page architecture
 
 - **`/`** — Static Astro page. Hero, three feature cards, CTA to `/quiz`. Footer carries Ko-fi + feedback link. Zero JS.
-- **`/quiz`** — Astro page that mounts `<QuizApp client:load />`. The island contains a reducer-driven flow with one component per question type, a progress bar, and Next/Previous controls. Disabled finish button until all required questions answered.
+- **`/quiz`** — Astro page that mounts `<QuizApp client:load />`. The island is a `useReducer`-driven flow: one input component per question type, a progress bar, and Previous / Restart / Submit-Next-Finish controls. Each question is submitted individually:
+  1. The user picks an answer; **Submit answer** unlocks once the question is answered (or is non-required).
+  2. After submit, the answer is **locked** (`disabled` propagates into the input component), an `Alert` shows correct/incorrect plus the per-option or fallback `feedback` text, and the primary button becomes **Next →** (or **Finish** on the last question).
+  3. For questions with a `fail_on_hint` rule, clicking the hint button records `hintsUsed` **and auto-submits**, so the question is marked wrong with the message "Question failed — you should know."
+  4. The submitted set is persisted in `sessionStorage` (`ulituk:quiz-submitted:v1`) alongside the session JSON, so a reload preserves the lock and feedback state.
 - **`/results`** — Astro page that mounts `<ResultsView client:only="react" />` (sessionStorage isn't available during SSR). Shows score, persona card, per-question breakdown, share + retake CTAs.
 - **`/feedback`** — Astro page mounting `<FeedbackForm client:load />` that submits via Astro Actions. Optimistic success state plus mailto fallback if the POST fails.
 - **`/404`** — Static not-found page.
@@ -173,7 +177,7 @@ export interface QuizSession {
 
 ## 8. Analytics, SEO, privacy
 
-- **Plausible** script embedded in `BaseLayout`, with manual events: `quiz_start`, `quiz_complete`, `feedback_submit`, `share_click`, `ko_fi_click`. (Wiring deferred — see Roadmap.)
+- **Plausible** script embedded in `BaseLayout` when `PUBLIC_PLAUSIBLE_DOMAIN` is set. `BaseLayout` calls `installPlausibleSink()` so the React islands' `trackEvent` calls forward through `window.plausible(...)`. Events: `quiz_start`, `quiz_complete`, `feedback_submit`, `share_click`. (`ko_fi_click` is a small follow-up — see Roadmap.)
 - **SEO** — `<Seo>` Astro helper composes title/description/OG tags. `@astrojs/sitemap` generates `/sitemap-index.xml`. `public/robots.txt` allows everything.
 - **Privacy** — no cookies, no localStorage of PII, no server-side persistence. The optional feedback email is forwarded inside the email body and discarded immediately.
 
@@ -206,7 +210,7 @@ export interface QuizSession {
 
 - Cloudflare Pages with `@astrojs/cloudflare` adapter. `output: "server"`; every page sets `export const prerender = true` so HTML output is identical to a static build, with only the feedback Action endpoint server-rendered.
 - One GitHub Actions workflow (`.github/workflows/ci.yml`): install → lint → lint:styles → typecheck → unit tests → build.
-- Security headers configured via Cloudflare Pages settings (CSP, Referrer-Policy, X-Content-Type-Options).
+- Security headers ship from [`public/_headers`](../public/_headers) (CSP, Referrer-Policy, X-Content-Type-Options, Permissions-Policy). Cloudflare Pages applies the file to every response.
 - No middleware, no edge functions beyond the feedback POST.
 
 ---

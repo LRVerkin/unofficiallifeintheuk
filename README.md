@@ -76,11 +76,11 @@ src/
 ├── pages/              # / quiz / results / feedback / 404
 ├── layouts/            # BaseLayout.astro
 ├── components/
-│   ├── astro/          # Static Astro components (header, footer, KoFi)
-│   └── react/          # React island components (built next session)
+│   ├── astro/          # Static Astro components (header, footer, KoFi, SEO)
+│   └── react/          # React island components (primitives + QuizApp / ResultsView / FeedbackForm)
 ├── lib/                # Framework-free quiz engine + helpers
 ├── data/               # Hand-authored questions + personas + Zod schemas
-├── actions/            # Astro Actions (feedback handler — built next session)
+├── actions/            # Astro Actions (submitFeedback)
 └── styles/global.css   # Tailwind 4 CSS-first config
 public/                 # Static assets (favicon, persona placeholders)
 tests/unit/             # Vitest suites
@@ -99,6 +99,19 @@ docs/                   # PRD, Architecture, QuestionBank, Roadmap
 
 `PUBLIC_*` values are exposed to the browser; everything else is server-only.
 
+## Deploying
+
+The site deploys to **Cloudflare Pages** via the `@astrojs/cloudflare` adapter. Two one-time steps before the first deploy:
+
+1. **Create the `SESSION` KV namespace.** `@astrojs/cloudflare` needs a KV binding to back its session support; the binding is declared in [`wrangler.toml`](wrangler.toml) with a placeholder id.
+   ```bash
+   pnpm dlx wrangler kv namespace create SESSION
+   ```
+   Wrangler prints `id = "..."` — paste that value into `wrangler.toml` in place of `REPLACE_WITH_KV_NAMESPACE_ID`. Without this, the first Pages deploy will fail with an invalid-binding error.
+2. **Set environment variables** in the Cloudflare Pages project (`Settings → Environment variables`): every variable listed above. `FEEDBACK_FROM_EMAIL` must be on a Resend-verified domain.
+
+Security headers ship from [`public/_headers`](public/_headers); Cloudflare Pages applies the file to every response. Local development (`pnpm dev`) doesn't need either step — the binding is only consulted at deploy time.
+
 ## Roadmap
 
-See [`docs/Roadmap.md`](docs/Roadmap.md) for the prioritised list of remaining work (quiz UI, results, feedback form, analytics, persona artwork, CI, etc.).
+See [`docs/Roadmap.md`](docs/Roadmap.md) for what's shipped and what's left. Phases 0–7 are complete; Phase 8 (deploy) has manual Cloudflare steps and final persona artwork outstanding.
