@@ -1,6 +1,8 @@
 # Design System Notes
 
-This lightweight guide captures component usage and accessibility considerations introduced in Step 4. Expand it as new primitives emerge.
+This lightweight guide captures component usage and accessibility considerations for the dependency-free **primitive** components in [`src/components/react/`](../src/components/react/) — Button, Card, RadioGroup, CheckboxGroup, RankList, TextAnswer, ProgressBar, Alert. Expand it as new primitives emerge.
+
+The **composite** components that build the app — `QuizApp`, `QuestionCard`, `ResultsView`, `ResultBreakdown`, `PersonaCard`, `FeedbackForm` — are described in [`Architecture.md`](Architecture.md): §6 covers page-level mounts and the quiz flow, §5 covers the underlying engine.
 
 ## Tokens & Foundations
 
@@ -10,12 +12,14 @@ This lightweight guide captures component usage and accessibility considerations
 
 ## Core Components
 
-- **Button**: variants (`primary`, `secondary`, `ghost`, `link`). Always include visible focus outline (`focus-outline` class). Use `aria-live` sparingly for loading states.
-- **Card**: wraps content sections with `shadow-card` and `rounded-3xl`. Use semantic headings inside.
-- **Input/Field**: pair `label` + `id`, include helper/error text and `aria-invalid` when needed.
-- **Checkbox/Radio**: ensure labels are clickable; group radios within `fieldset` + `legend` for question prompts.
-- **ProgressBar**: use `role="progressbar"` with `aria-valuenow`, `aria-valuemin`, `aria-valuemax`.
-- **Tooltip**: rely on Radix primitives; ensure keyboard trigger works and `aria-describedby` links to content.
+- **Button**: variants `primary`, `secondary`, `ghost`; sizes `sm`, `md`. Visible focus outline.
+- **Card**: generic surface wrapper rendering a semantic `<section>` by default; the `as` prop overrides the tag. Border + `--color-surface` background + padding via CSS variables.
+- **RadioGroup**: `<fieldset>` + `<legend>` + native radios, single-select.
+- **CheckboxGroup**: same pattern as `RadioGroup`; selection is returned sorted ascending.
+- **RankList**: up/down buttons (boundary-disabled), `aria-live` reorder announcements, no drag-and-drop dependency.
+- **TextAnswer**: `<label>` paired via `htmlFor`; sets `aria-invalid` + `aria-describedby` when an error is supplied.
+- **ProgressBar**: `role="progressbar"` with `aria-valuenow` / `aria-valuemin` / `aria-valuemax`; `current` clamped to `[0, total]`.
+- **Alert**: `role="status"` + `aria-live="polite"` for info; `role="alert"` + `aria-live="assertive"` for success/error.
 
 ## Layout Components
 

@@ -31,14 +31,14 @@ Replaced Next.js 16 / React 19 with Astro 5 + React island + Tailwind 4. The mig
 ### Known small follow-ups (carry into the next session)
 
 - ✅ Replaced deprecated `z.ZodIssueCode.custom` with the string literal `code: "custom"` in `src/data/personas.ts` and `src/data/question-schema.ts` (8 sites total). Down to 0 hints (Phase 8).
-- ⬜ Add a comment on `src/lib/personas.ts` explaining that `getPersonaForPercentage` relies on `personas` being sorted descending in `src/data/personas.ts:117`. The find-and-take-first is fragile if anyone re-sorts.
+- ✅ Added a comment on `src/lib/personas.ts` explaining that `getPersonaForPercentage` relies on `personas` being sorted descending in `src/data/personas.ts`. The find-and-take-first is fragile if anyone re-sorts.
 - ⬜ Make scoring's `selectedOptionIds` switch exhaustive (`default: assertNever(...)` or similar) so adding a new response type is a TS error, not silent fall-through.
 
 ---
 
 ## ✅ Phase 2 — Design system primitives (complete)
 
-Eight dependency-free React primitives in `src/components/react/`, each with a co-located Vitest + RTL spec under `tests/unit/components/react/`. 37 new tests (54 total).
+Eight dependency-free React primitives in `src/components/react/`, each with a co-located Vitest + RTL spec under `tests/unit/components/react/`.
 
 - ✅ `Button.tsx` — primary / secondary / ghost variants, sm/md sizes.
 - ✅ `Card.tsx` — generic surface wrapper with `as` prop for semantic overrides.
@@ -64,7 +64,7 @@ A working `<QuizApp />` React island lives on `/quiz`. Marketing pages still shi
 - ✅ Quiz analytics — `quiz_start` fires once when the user lands `in_progress`, `quiz_complete` fires after `completeSession()`. The sink is still a no-op until Phase 6 wires Plausible.
 - ✅ On completion the island redirects to `/results` (placeholder for now; Phase 4 reads the persisted session from sessionStorage).
 
-Tests added: persistence (5), QuestionCard (6), QuizApp (7) — 18 new specs, **72 tests / 18 files** total.
+Tests added: persistence, QuestionCard, QuizApp.
 
 ## ✅ Phase 4 — Results (complete)
 
@@ -75,7 +75,7 @@ Tests added: persistence (5), QuestionCard (6), QuizApp (7) — 18 new specs, **
 - ✅ Retake button: `clearSession()` then `window.location.assign("/quiz")`.
 - ✅ `results.astro` mounts `<ResultsView client:only="react" />`.
 
-Tests added (15): PersonaCard (4), ResultBreakdown (5), ResultsView (6) — **87 tests / 21 files** total.
+Tests added: PersonaCard, ResultBreakdown, ResultsView.
 
 ## ✅ Phase 5 — Feedback form (complete)
 
@@ -87,7 +87,7 @@ Tests added (15): PersonaCard (4), ResultBreakdown (5), ResultsView (6) — **87
 - ✅ `astro:actions` aliased to a small stub in `vitest.config.ts` so component tests can lazy-import the virtual module without erroring during transform.
 - ⬜ Rate limiter — deliberately deferred. Cloudflare Workers' in-memory state is per-isolate and per-cold-start, so a `Map`-based limiter doesn't actually rate-limit. Track as a Phase 9 follow-up: per-IP token bucket in Cloudflare KV or Upstash.
 
-Tests added (10): `formatFeedbackEmail` (4), FeedbackForm (6) — **97 tests / 23 files** total.
+Tests added: `formatFeedbackEmail`, FeedbackForm.
 
 ## ✅ Phase 6 — Analytics & SEO (complete)
 
@@ -100,11 +100,11 @@ Tests added (10): `formatFeedbackEmail` (4), FeedbackForm (6) — **97 tests / 2
 
 Side fix: the analytics installer is a tiny inline `<script>` (~234 B raw), so every page ships at least 1 `<script>` tag now (was 0 for marketing pages). Acceptable trade for unified analytics.
 
-Tests added (4): plausibleSink forwards / no-ops / handles empty payload, sink configuration round-trip — **101 tests / 24 files** total.
+Tests added: plausibleSink forwards / no-ops / handles empty payload, sink configuration round-trip.
 
 ## ✅ Phase 7 — Quality gates (mostly complete)
 
-- ✅ Vitest + RTL coverage shipped alongside Phases 2–6 (104 tests across 25 files).
+- ✅ Vitest + RTL coverage shipped alongside Phases 2–6. Run `pnpm test:unit` for the current total.
 - ✅ Bidirectional drift test (`tests/unit/data/question-drift.spec.ts`) — every `Q\d{3}` ID in `docs/QuestionBank.md` exists in `src/data/questions.ts` and vice versa, plus a duplicate guard on the markdown side. Cheap regex scan, no parser needed.
 - ✅ GitHub Actions `ci.yml` — install (frozen lockfile) → eslint → stylelint → astro check + tsc → vitest → build, on every PR and push to main. Concurrency group cancels in-flight runs on the same ref.
 - ⬜ Playwright happy-path e2e: start → answer all → results → share → feedback. Deferred to Phase 9 — the unit suite already covers the engine and components, and a meaningful e2e wants a deployed preview to run against.
@@ -117,6 +117,17 @@ Tests added (4): plausibleSink forwards / no-ops / handles empty payload, sink c
 - ✅ `public/_headers` ships a sensible CSP (`script-src 'self' 'unsafe-inline' https://plausible.io`, `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`, etc.) plus `X-Content-Type-Options`, `Referrer-Policy`, and `Permissions-Policy`. Cloudflare Pages applies `_headers` to every response.
 - ⬜ Lighthouse audit on the deployed site (target ≥ 95 perf / a11y / best practices). **Post-deploy.**
 - ⬜ Final persona artwork commissioned and dropped into `public/personas/`. Placeholders ship in the meantime; see [`public/personas/README.md`](../public/personas/README.md).
+
+## ✅ Phase 8.5 — Launch-shell redesign & quiz-flow polish (complete)
+
+Iteration on top of the Phase 3/4 islands after the first internal review.
+
+- ✅ Launch-shell redesign — `BaseLayout`, `SiteHeader`, `SiteFooter`, landing copy refreshed for the public launch (commit `9e8f067`).
+- ✅ Quiz hydration fix — sessionStorage restore no longer races the React mount.
+- ✅ Per-question Submit / lock / feedback flow in `QuizApp.tsx`: each question is submitted individually, the input locks, an `Alert` shows correct/incorrect plus `feedback` text, and the primary button advances to Next or Finish. Submitted set persisted to `sessionStorage` under `ulituk:quiz-submitted:v1` (commit `7a3fe8d`).
+- ✅ `fail_on_hint` is now an **auto-submit** — clicking the hint records `hintsUsed`, locks the question, and marks it wrong with "Question failed — you should know."
+- ✅ `ResultBreakdown` per-option feedback lookup keyed to the user's pick (handles both "correct, here's why" and "wrong, here's why" messages).
+- ✅ Review pass — `RankList` focus restoration, feedback action hardening (commit `cec4de5`).
 
 ## ⬜ Phase 9 — Post-launch
 
