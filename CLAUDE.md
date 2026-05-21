@@ -65,16 +65,6 @@ Defined as a discriminated union in `src/data/question-schema.ts`, applied on to
 
 Tailwind 4 CSS-first: tokens live as `@theme` blocks in `src/styles/global.css`. Components frequently consume them via `var(--color-*)` directly (see `Card.tsx`) rather than through generated utilities. No `dark:` utilities ship today — dark mode is deferred (see [docs/Roadmap.md](docs/Roadmap.md) Phase 9).
 
-## Pre-deploy checklist
-
-Before the first Cloudflare Pages deploy, replace `REPLACE_WITH_KV_NAMESPACE_ID` in [`wrangler.toml`](wrangler.toml) with the id from:
-
-```bash
-pnpm dlx wrangler kv namespace create SESSION
-```
-
-Without this, the deploy fails with an invalid-binding error. `pnpm dev` does not need the binding configured. See [README.md](README.md) §Deploying for the full sequence.
-
 ## Conventions worth respecting
 
 - **Deliberately not adopted** (see [docs/Architecture.md](docs/Architecture.md) §2): Next.js, Radix, drag-and-drop libraries, Storybook, Sentry, Lighthouse CI, Dependabot, a markdown-based content pipeline. Don't reintroduce them without raising the trade-off.
