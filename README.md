@@ -101,7 +101,7 @@ docs/                   # PRD, Architecture, QuestionBank, Roadmap
 
 ## Deploying
 
-The site deploys to **Cloudflare Pages** via the `@astrojs/cloudflare` adapter. One one-time step before the first deploy:
+The site deploys to **Cloudflare Pages** via the `@astrojs/cloudflare` adapter. One step before the first deploy:
 
 1. **Set environment variables** in the Cloudflare Pages project (`Settings → Environment variables`): every variable listed above. `FEEDBACK_FROM_EMAIL` must be on a Resend-verified domain.
 
