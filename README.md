@@ -101,16 +101,11 @@ docs/                   # PRD, Architecture, QuestionBank, Roadmap
 
 ## Deploying
 
-The site deploys to **Cloudflare Pages** via the `@astrojs/cloudflare` adapter. Two one-time steps before the first deploy:
+The site deploys to **Cloudflare Pages** via the `@astrojs/cloudflare` adapter. One one-time step before the first deploy:
 
-1. **Create the `SESSION` KV namespace.** `@astrojs/cloudflare` needs a KV binding to back its session support; the binding is declared in [`wrangler.toml`](wrangler.toml) with a placeholder id.
-   ```bash
-   pnpm dlx wrangler kv namespace create SESSION
-   ```
-   Wrangler prints `id = "..."` — paste that value into `wrangler.toml` in place of `REPLACE_WITH_KV_NAMESPACE_ID`. Without this, the first Pages deploy will fail with an invalid-binding error.
-2. **Set environment variables** in the Cloudflare Pages project (`Settings → Environment variables`): every variable listed above. `FEEDBACK_FROM_EMAIL` must be on a Resend-verified domain.
+1. **Set environment variables** in the Cloudflare Pages project (`Settings → Environment variables`): every variable listed above. `FEEDBACK_FROM_EMAIL` must be on a Resend-verified domain.
 
-Security headers ship from [`public/_headers`](public/_headers); Cloudflare Pages applies the file to every response. Local development (`pnpm dev`) doesn't need either step — the binding is only consulted at deploy time.
+Security headers ship from [`public/_headers`](public/_headers); Cloudflare Pages applies the file to every response. The app doesn't use Astro sessions, so no KV namespace binding is required.
 
 ## Roadmap
 

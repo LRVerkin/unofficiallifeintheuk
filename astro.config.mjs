@@ -7,9 +7,12 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   site: "https://unofficiallifeinthe.uk",
   output: "server",
+  // Opt out of @astrojs/cloudflare's default KV-backed sessions — this app
+  // doesn't use server sessions (quiz state lives in browser sessionStorage).
+  // Setting any driver here makes the adapter skip its KV auto-enable.
+  session: { driver: "memory" },
   adapter: cloudflare({
     platformProxy: { enabled: true },
-    sessionKVBindingName: "SESSION",
   }),
   integrations: [
     react(),

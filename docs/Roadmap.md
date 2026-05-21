@@ -113,7 +113,7 @@ Tests added: plausibleSink forwards / no-ops / handles empty payload, sink confi
 
 - ⬜ Cloudflare Pages connected to GitHub. **Manual** — connect in the dashboard and point at the `main` branch.
 - ⬜ Production env vars set (`RESEND_API_KEY`, `FEEDBACK_TO_EMAIL`, `FEEDBACK_FROM_EMAIL`, `PUBLIC_KO_FI_URL`, `PUBLIC_PLAUSIBLE_DOMAIN`). **Manual** — add via Pages → Settings → Environment variables. `FEEDBACK_FROM_EMAIL` must be on a Resend-verified domain.
-- ✅ `wrangler.toml` declares the `SESSION` KV binding so `@astrojs/cloudflare` stops emitting the build warning. The `id` is a placeholder — replace with the real KV namespace id from `wrangler kv namespace create SESSION` before deploy.
+- ✅ Cloudflare KV / Astro session ceremony removed. The app has no server-side sessions (quiz state lives in browser `sessionStorage`), so `astro.config.mjs` now sets `session: { driver: "memory" }` to opt out of `@astrojs/cloudflare`'s KV-backed session default, and the `[[kv_namespaces]]` block was dropped from `wrangler.toml`. One fewer manual step before first deploy.
 - ✅ `public/_headers` ships a sensible CSP (`script-src 'self' 'unsafe-inline' https://plausible.io`, `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`, etc.) plus `X-Content-Type-Options`, `Referrer-Policy`, and `Permissions-Policy`. Cloudflare Pages applies `_headers` to every response.
 - ⬜ Lighthouse audit on the deployed site (target ≥ 95 perf / a11y / best practices). **Post-deploy.**
 - ⬜ Final persona artwork commissioned and dropped into `public/personas/`. Placeholders ship in the meantime; see [`public/personas/README.md`](../public/personas/README.md).
